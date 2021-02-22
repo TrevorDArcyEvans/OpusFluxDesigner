@@ -71,6 +71,7 @@ namespace RehostedWorkflowDesigner.Views
 		private Dictionary<object, SourceLocation> _wfElementToSourceLocationMap;
 		private int _lineIndex;
 
+		private AutoResetEvent _resumeRuntimeFromHost;
 		private readonly List<SourceLocation> _breakpointList = new List<SourceLocation>();
 
 		public MainWindow()
@@ -185,50 +186,50 @@ namespace RehostedWorkflowDesigner.Views
 				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Security.Activities");
 				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Management.Activities");
 				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Diagnostics.Activities");
-				//AppDomain.CurrentDomain.Load("Microsoft.Powershell.Core.Activities");
+				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Core.Activities");
 				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Activities");
 
 				// get all loaded assemblies
 				IEnumerable<Assembly> appAssemblies = AppDomain.CurrentDomain.GetAssemblies().OrderBy(a => a.GetName().Name);
 
 				// check if assemblies contain activities
-				int activitiesCount = 0;
-				foreach (Assembly activityLibrary in appAssemblies)
+				var activitiesCount = 0;
+				foreach (var activityLibrary in appAssemblies)
 				{
 					var wfToolboxCategory = new ToolboxCategory(activityLibrary.GetName().Name);
-					var actvities = from
+					var activities = from
 										activityType in activityLibrary.GetExportedTypes()
-									where
-										(activityType.IsSubclassOf(typeof(Activity))
-										|| activityType.IsSubclassOf(typeof(NativeActivity))
-										|| activityType.IsSubclassOf(typeof(DynamicActivity))
-										|| activityType.IsSubclassOf(typeof(ActivityWithResult))
-										|| activityType.IsSubclassOf(typeof(AsyncCodeActivity))
-										|| activityType.IsSubclassOf(typeof(CodeActivity))
-										|| activityType == typeof(System.Activities.Core.Presentation.Factories.ForEachWithBodyFactory<Type>)
-										|| activityType == typeof(System.Activities.Statements.FlowNode)
-										|| activityType == typeof(System.Activities.Statements.State)
-										|| activityType == typeof(System.Activities.Core.Presentation.FinalState)
-										|| activityType == typeof(System.Activities.Statements.FlowDecision)
-										|| activityType == typeof(System.Activities.Statements.FlowNode)
-										|| activityType == typeof(System.Activities.Statements.FlowStep)
-										|| activityType == typeof(System.Activities.Statements.FlowSwitch<Type>)
-										|| activityType == typeof(System.Activities.Statements.ForEach<Type>)
-										|| activityType == typeof(System.Activities.Statements.Switch<Type>)
-										|| activityType == typeof(System.Activities.Statements.TryCatch)
-										|| activityType == typeof(System.Activities.Statements.While))
-										&& activityType.IsVisible
-										&& activityType.IsPublic
-										&& !activityType.IsNested
-										&& !activityType.IsAbstract
-										&& (activityType.GetConstructor(Type.EmptyTypes) != null)
-										&& !activityType.Name.Contains('`') //optional, for extra cleanup
-									orderby
-										activityType.Name
-									select
-										new ToolboxItemWrapper(activityType);
+									 where
+										 (activityType.IsSubclassOf(typeof(Activity))
+										 || activityType.IsSubclassOf(typeof(NativeActivity))
+										 || activityType.IsSubclassOf(typeof(DynamicActivity))
+										 || activityType.IsSubclassOf(typeof(ActivityWithResult))
+										 || activityType.IsSubclassOf(typeof(AsyncCodeActivity))
+										 || activityType.IsSubclassOf(typeof(CodeActivity))
+										 || activityType == typeof(System.Activities.Core.Presentation.Factories.ForEachWithBodyFactory<Type>)
+										 || activityType == typeof(System.Activities.Statements.FlowNode)
+										 || activityType == typeof(System.Activities.Statements.State)
+										 || activityType == typeof(System.Activities.Core.Presentation.FinalState)
+										 || activityType == typeof(System.Activities.Statements.FlowDecision)
+										 || activityType == typeof(System.Activities.Statements.FlowNode)
+										 || activityType == typeof(System.Activities.Statements.FlowStep)
+										 || activityType == typeof(System.Activities.Statements.FlowSwitch<Type>)
+										 || activityType == typeof(System.Activities.Statements.ForEach<Type>)
+										 || activityType == typeof(System.Activities.Statements.Switch<Type>)
+										 || activityType == typeof(System.Activities.Statements.TryCatch)
+										 || activityType == typeof(System.Activities.Statements.While))
+										 && activityType.IsVisible
+										 && activityType.IsPublic
+										 && !activityType.IsNested
+										 && !activityType.IsAbstract
+										 && (activityType.GetConstructor(Type.EmptyTypes) != null)
+										 && !activityType.Name.Contains('`') //optional, for extra cleanup
+									 orderby
+										 activityType.Name
+									 select
+										 new ToolboxItemWrapper(activityType);
 
-					actvities.ToList().ForEach(wfToolboxCategory.Add);
+					activities.ToList().ForEach(wfToolboxCategory.Add);
 
 					if (wfToolboxCategory.Tools.Count > 0)
 					{
@@ -259,15 +260,6 @@ namespace RehostedWorkflowDesigner.Views
 			}
 		}
 
-		private void WfExecutionCompleted(WorkflowApplicationCompletedEventArgs e)
-		{
-			// This is to remove the final debug adornment
-			Dispatcher.Invoke(DispatcherPriority.Render, (Action)(() =>
-			{
-				_wfDesigner.DebugManagerView.CurrentLocation = new SourceLocation(_currentWorkflowFile, 1, 1, 1, 10);
-			}));
-		}
-
 		// Show the Debug Adornment
 		private void ShowDebug(SourceLocation srcLoc)
 		{
@@ -275,13 +267,29 @@ namespace RehostedWorkflowDesigner.Views
 			{
 				_wfDesigner.DebugManagerView.CurrentLocation = srcLoc;
 			}));
+
+			// Check if this is where any BP is set
+			var isBreakpointHit = false;
+			foreach (var src in _breakpointList)
+			{
+				if (src.StartLine == srcLoc.StartLine &&
+					src.EndLine == srcLoc.EndLine)
+				{
+					isBreakpointHit = true;
+				}
+			}
+
+			if (isBreakpointHit)
+			{
+				_resumeRuntimeFromHost.WaitOne();
+			}
 		}
 
 		private Dictionary<string, Activity> BuildActivityIdToWfElementMap(Dictionary<object, SourceLocation> wfElementToSourceLocationMap)
 		{
-			Dictionary<string, Activity> map = new Dictionary<string, Activity>();
+			var map = new Dictionary<string, Activity>();
 
-			foreach (object instance in wfElementToSourceLocationMap.Keys)
+			foreach (var instance in wfElementToSourceLocationMap.Keys)
 			{
 				if (instance is Activity wfElement)
 				{
@@ -339,8 +347,7 @@ namespace RehostedWorkflowDesigner.Views
 			Debug.Assert(rootModelObject != null, "Cannot pass null as rootModelObject");
 
 			Activity rootWorkflowElement;
-			IDebuggableWorkflowTree debuggableWorkflowTree = rootModelObject as IDebuggableWorkflowTree;
-			if (debuggableWorkflowTree != null)
+			if (rootModelObject is IDebuggableWorkflowTree debuggableWorkflowTree)
 			{
 				rootWorkflowElement = debuggableWorkflowTree.GetWorkflowRoot();
 			}
@@ -356,17 +363,17 @@ namespace RehostedWorkflowDesigner.Views
 		{
 			// get workflow source from designer
 			_wfDesigner.Flush();
-			MemoryStream workflowStream = new MemoryStream(Encoding.Default.GetBytes(_wfDesigner.Text));
+			var workflowStream = new MemoryStream(Encoding.Default.GetBytes(_wfDesigner.Text));
 
-			ActivityXamlServicesSettings settings = new ActivityXamlServicesSettings()
+			var settings = new ActivityXamlServicesSettings()
 			{
 				CompileExpressions = true
 			};
 
-			Activity root = ActivityXamlServices.Load(workflowStream, settings);
+			var root = ActivityXamlServices.Load(workflowStream, settings);
 			WorkflowInspectionServices.CacheMetadata(root);
 
-			IEnumerator<Activity> enumerator1 = WorkflowInspectionServices.GetActivities(root).GetEnumerator();
+			var enumerator1 = WorkflowInspectionServices.GetActivities(root).GetEnumerator();
 			// Get the first child of the x:class
 			enumerator1.MoveNext();
 			root = enumerator1.Current;
@@ -401,27 +408,47 @@ namespace RehostedWorkflowDesigner.Views
 
 		private void CmdWorkflowRun(object sender, ExecutedRoutedEventArgs e)
 		{
-			ResetUI();
-			RegenerateSourceDebuggerMappings();
-
-			// get workflow source from designer
-			_wfDesigner.Flush();
-			var workflowStream = new MemoryStream(Encoding.Default.GetBytes(_wfDesigner.Text));
-
-			var settings = new ActivityXamlServicesSettings
+			if (_resumeRuntimeFromHost is null)
 			{
-				CompileExpressions = true
-			};
+				ResetUI();
+				RegenerateSourceDebuggerMappings();
 
-			var activityExecute = ActivityXamlServices.Load(workflowStream, settings) as DynamicActivity;
+				_resumeRuntimeFromHost = new AutoResetEvent(false);
 
-			// configure workflow application
-			_wfApp = new WorkflowApplication(activityExecute);
-			_wfApp.Extensions.Add(_executionLog);
-			_wfApp.Completed = WfExecutionCompleted;
+				// get workflow source from designer
+				_wfDesigner.Flush();
+				var workflowStream = new MemoryStream(Encoding.Default.GetBytes(_wfDesigner.Text));
 
-			// execute 
-			_wfApp.Run();
+				var settings = new ActivityXamlServicesSettings
+				{
+					CompileExpressions = true
+				};
+
+				var activityExecute = ActivityXamlServices.Load(workflowStream, settings) as DynamicActivity;
+
+				// configure workflow application
+				_wfApp = new WorkflowApplication(activityExecute);
+				_wfApp.Extensions.Add(_executionLog);
+
+				// execute 
+				ThreadPool.QueueUserWorkItem(context =>
+				{
+					// Start the Runtime
+					_wfApp.Run(TimeSpan.FromHours(1));
+
+					_resumeRuntimeFromHost = null;
+
+					// This is to remove the final debug adornment
+					Dispatcher.Invoke(DispatcherPriority.Render, (Action)(() =>
+					{
+						_wfDesigner.DebugManagerView.CurrentLocation = new SourceLocation(_currentWorkflowFile, 1, 1, 1, 10);
+					}));
+				});
+			}
+			else
+			{
+				_resumeRuntimeFromHost.Set();
+			}
 		}
 
 		private void CmdWorkflowStop(object sender, ExecutedRoutedEventArgs e)
@@ -434,7 +461,11 @@ namespace RehostedWorkflowDesigner.Views
 		{
 			if (_currentWorkflowFile == string.Empty)
 			{
-				var dialogSave = new SaveFileDialog { Title = "Save Workflow", Filter = "Workflows (.xaml)|*.xaml" };
+				var dialogSave = new SaveFileDialog
+				{
+					Title = "Save Workflow",
+					Filter = "Workflows (.xaml)|*.xaml"
+				};
 				if (dialogSave.ShowDialog() == true)
 				{
 					_wfDesigner.Save(dialogSave.FileName);
