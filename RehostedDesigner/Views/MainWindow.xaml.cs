@@ -324,7 +324,7 @@ namespace RehostedWorkflowDesigner.Views
 
 		private object GetRootInstance()
 		{
-			ModelService modelService = _wfDesigner.Context.Services.GetService<ModelService>();
+			var modelService = _wfDesigner.Context.Services.GetService<ModelService>();
 			return modelService?.Root.GetCurrentValue();
 		}
 
