@@ -29,6 +29,7 @@ namespace RehostedWorkflowDesigner.Views
 	{
 		private const string All = "*";
 
+		private WorkflowDesigner _wfDesigner = new WorkflowDesigner();
 		private readonly ToolboxControl _wfToolbox = new ToolboxControl();
 		private readonly SimulatorTrackingParticipant _executionLog = new SimulatorTrackingParticipant
 		{
@@ -153,12 +154,12 @@ namespace RehostedWorkflowDesigner.Views
 				try
 				{
 					// Tell Debug Service that the Line Clicked is _______
-					CustomWfDesigner.Instance.DebugManagerView.CurrentLocation = _textLineToSourceLocationMap[lineClicked];
+					_wfDesigner.DebugManagerView.CurrentLocation = _textLineToSourceLocationMap[lineClicked];
 				}
 				catch (Exception)
 				{
 					// If the user clicks other than on the tracking records themselves.
-					CustomWfDesigner.Instance.DebugManagerView.CurrentLocation = new SourceLocation(_currentWorkflowFile, 1, 1, 1, 10);
+					_wfDesigner.DebugManagerView.CurrentLocation = new SourceLocation(_currentWorkflowFile, 1, 1, 1, 10);
 				}
 			}));
 		}
@@ -263,7 +264,7 @@ namespace RehostedWorkflowDesigner.Views
 			// This is to remove the final debug adornment
 			Dispatcher.Invoke(DispatcherPriority.Render, (Action)(() =>
 			{
-				CustomWfDesigner.Instance.DebugManagerView.CurrentLocation = new SourceLocation(_currentWorkflowFile, 1, 1, 1, 10);
+				_wfDesigner.DebugManagerView.CurrentLocation = new SourceLocation(_currentWorkflowFile, 1, 1, 1, 10);
 			}));
 		}
 
@@ -272,7 +273,7 @@ namespace RehostedWorkflowDesigner.Views
 		{
 			Dispatcher.Invoke(DispatcherPriority.Render, (Action)(() =>
 			{
-				CustomWfDesigner.Instance.DebugManagerView.CurrentLocation = srcLoc;
+				_wfDesigner.DebugManagerView.CurrentLocation = srcLoc;
 			}));
 		}
 
@@ -293,31 +294,31 @@ namespace RehostedWorkflowDesigner.Views
 
 		private Dictionary<object, SourceLocation> UpdateSourceLocationMappingInDebuggerService()
 		{
-			object rootInstance = GetRootInstance();
-			Dictionary<object, SourceLocation> sourceLocationMapping = new Dictionary<object, SourceLocation>();
+			var rootInstance = GetRootInstance();
+			var sourceLocationMapping = new Dictionary<object, SourceLocation>();
 
 			if (rootInstance != null)
 			{
-				Activity documentRootElement = GetRootWorkflowElement(rootInstance);
+				var documentRootElement = GetRootWorkflowElement(rootInstance);
 
 				SourceLocationProvider.CollectMapping(
 					GetRootRuntimeWorkflowElement(),
 					documentRootElement,
 					sourceLocationMapping,
-					CustomWfDesigner.Instance.Context.Items.GetValue<WorkflowFileItem>().LoadedFile);
+					_wfDesigner.Context.Items.GetValue<WorkflowFileItem>().LoadedFile);
 
 				// Collect the mapping between the Model Item tree and its underlying source location
 				SourceLocationProvider.CollectMapping(
 					documentRootElement,
 					documentRootElement,
 					_designerSourceLocationMapping,
-				   CustomWfDesigner.Instance.Context.Items.GetValue<WorkflowFileItem>().LoadedFile);
+					_wfDesigner.Context.Items.GetValue<WorkflowFileItem>().LoadedFile);
 			}
 
 			// Notify the DebuggerService of the new sourceLocationMapping.
 			// When rootInstance == null, it'll just reset the mapping.
 			// DebuggerService debuggerService = debuggerService as DebuggerService;
-			var debuggerService = (DebuggerService)CustomWfDesigner.Instance.DebugManagerView;
+			var debuggerService = (DebuggerService)_wfDesigner.DebugManagerView;
 			debuggerService.UpdateSourceLocations(_designerSourceLocationMapping);
 
 			return sourceLocationMapping;
@@ -327,7 +328,7 @@ namespace RehostedWorkflowDesigner.Views
 
 		private object GetRootInstance()
 		{
-			ModelService modelService = CustomWfDesigner.Instance.Context.Services.GetService<ModelService>();
+			ModelService modelService = _wfDesigner.Context.Services.GetService<ModelService>();
 			return modelService?.Root.GetCurrentValue();
 		}
 
@@ -354,8 +355,8 @@ namespace RehostedWorkflowDesigner.Views
 		private Activity GetRootRuntimeWorkflowElement()
 		{
 			// get workflow source from designer
-			CustomWfDesigner.Instance.Flush();
-			MemoryStream workflowStream = new MemoryStream(Encoding.Default.GetBytes(CustomWfDesigner.Instance.Text));
+			_wfDesigner.Flush();
+			MemoryStream workflowStream = new MemoryStream(Encoding.Default.GetBytes(_wfDesigner.Text));
 
 			ActivityXamlServicesSettings settings = new ActivityXamlServicesSettings()
 			{
@@ -404,8 +405,8 @@ namespace RehostedWorkflowDesigner.Views
 			RegenerateSourceDebuggerMappings();
 
 			// get workflow source from designer
-			CustomWfDesigner.Instance.Flush();
-			var workflowStream = new MemoryStream(Encoding.Default.GetBytes(CustomWfDesigner.Instance.Text));
+			_wfDesigner.Flush();
+			var workflowStream = new MemoryStream(Encoding.Default.GetBytes(_wfDesigner.Text));
 
 			var settings = new ActivityXamlServicesSettings
 			{
@@ -436,13 +437,13 @@ namespace RehostedWorkflowDesigner.Views
 				var dialogSave = new SaveFileDialog { Title = "Save Workflow", Filter = "Workflows (.xaml)|*.xaml" };
 				if (dialogSave.ShowDialog() == true)
 				{
-					CustomWfDesigner.Instance.Save(dialogSave.FileName);
+					_wfDesigner.Save(dialogSave.FileName);
 					_currentWorkflowFile = dialogSave.FileName;
 				}
 			}
 			else
 			{
-				CustomWfDesigner.Instance.Save(_currentWorkflowFile);
+				_wfDesigner.Save(_currentWorkflowFile);
 			}
 		}
 
@@ -471,23 +472,24 @@ namespace RehostedWorkflowDesigner.Views
 
 			if (dialogOpen.ShowDialog() == true)
 			{
-				using (var file = new StreamReader(dialogOpen.FileName, true))
+				using (new StreamReader(dialogOpen.FileName, true))
 				{
 					CreateNewWorkflowDesigner(() => CustomWfDesigner.NewInstance(dialogOpen.FileName), dialogOpen.FileName);
 				}
 			}
 		}
 
-		private void CreateNewWorkflowDesigner(Action createWfDesigner, string currentWorkflowFile = "")
+		private void CreateNewWorkflowDesigner(Func<WorkflowDesigner> createWfDesigner, string currentWorkflowFile = "")
 		{
-			CustomWfDesigner.Instance.ModelChanged -= WorkflowDesigner_OnModelChanged;
+			// unhook previous event handler
+			_wfDesigner.ModelChanged -= WorkflowDesigner_OnModelChanged;
 
 			_currentWorkflowFile = currentWorkflowFile;
-			createWfDesigner();
-			WfDesignerBorder.Child = CustomWfDesigner.Instance.View;
-			WfPropertyBorder.Child = CustomWfDesigner.Instance.PropertyInspectorView;
+			_wfDesigner = createWfDesigner();
+			WfDesignerBorder.Child = _wfDesigner.View;
+			WfPropertyBorder.Child = _wfDesigner.PropertyInspectorView;
 
-			CustomWfDesigner.Instance.ModelChanged += WorkflowDesigner_OnModelChanged;
+			_wfDesigner.ModelChanged += WorkflowDesigner_OnModelChanged;
 
 			ResetUI();
 			RegenerateSourceDebuggerMappings();
@@ -495,7 +497,7 @@ namespace RehostedWorkflowDesigner.Views
 
 		private void CmdToggleBreakpoint(object sender, ExecutedRoutedEventArgs e)
 		{
-			var mi = CustomWfDesigner.Instance.Context.Items.GetValue<Selection>().PrimarySelection;
+			var mi = _wfDesigner.Context.Items.GetValue<Selection>().PrimarySelection;
 			if (!(mi?.GetCurrentValue() is Activity activity))
 			{
 				return;
@@ -504,12 +506,12 @@ namespace RehostedWorkflowDesigner.Views
 			var srcLoc = _designerSourceLocationMapping[activity];
 			if (!_breakpointList.Contains(srcLoc))
 			{
-				CustomWfDesigner.Instance.Context.Services.GetService<IDesignerDebugView>().UpdateBreakpoint(srcLoc, BreakpointTypes.Bounded | BreakpointTypes.Enabled);
+				_wfDesigner.Context.Services.GetService<IDesignerDebugView>().UpdateBreakpoint(srcLoc, BreakpointTypes.Bounded | BreakpointTypes.Enabled);
 				_breakpointList.Add(srcLoc);
 			}
 			else
 			{
-				CustomWfDesigner.Instance.Context.Services.GetService<IDesignerDebugView>().UpdateBreakpoint(srcLoc, BreakpointTypes.None);
+				_wfDesigner.Context.Services.GetService<IDesignerDebugView>().UpdateBreakpoint(srcLoc, BreakpointTypes.None);
 				_breakpointList.Remove(srcLoc);
 			}
 		}

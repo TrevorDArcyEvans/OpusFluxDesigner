@@ -16,81 +16,57 @@ namespace RehostedWorkflowDesigner.Helpers
 		private const string DefaultWorkflow = "DefaultWorkflow.xaml";
 		private const string DefaultWorkflowCSharp = "DefaultWorkflowCSharp.xaml";
 
-		private static WorkflowDesigner _wfDesigner;
-		private static RoslynExpressionEditorService _expressionEditorService;
-		private static VbExpressionEditorService _expressionEditorServiceVB;
+		private static readonly RoslynExpressionEditorService ExpressionEditorService = new RoslynExpressionEditorService();
+		private static readonly VbExpressionEditorService ExpressionEditorServiceVb = new VbExpressionEditorService();
 
-		/// <summary>
-		/// Gets the current WorkflowDesigner Instance
-		/// </summary>
-		public static WorkflowDesigner Instance
+		private static WorkflowDesigner CreateInstance(string sourceFile = DefaultWorkflow)
 		{
-			get
-			{
-				if (_wfDesigner == null)
-				{
-					NewInstance(DefaultWorkflow);
-				}
-				return _wfDesigner;
-			}
+			var wfDesigner = new WorkflowDesigner();
+			wfDesigner.Context.Services.GetService<DesignerConfigurationService>().TargetFrameworkName = new System.Runtime.Versioning.FrameworkName(".NETFramework", new Version(4, 5));
+			wfDesigner.Context.Services.GetService<DesignerConfigurationService>().LoadingFromUntrustedSourceEnabled = true;
+
+			// associates all of the basic activities with their designers
+			new DesignerMetadata().Register();
+
+			// load Workflow Xaml
+			wfDesigner.Load(sourceFile);
+
+			return wfDesigner;
 		}
 
 		/// <summary>
 		/// Creates a new Workflow Designer instance (VB)
 		/// </summary>
 		/// <param name="sourceFile">Workflow FileName</param>
-		public static void NewInstance(string sourceFile = DefaultWorkflow)
+		public static WorkflowDesigner NewInstance(string sourceFile = DefaultWorkflow)
 		{
-			_wfDesigner = new WorkflowDesigner();
-			_wfDesigner.Context.Services.GetService<DesignerConfigurationService>().TargetFrameworkName = new System.Runtime.Versioning.FrameworkName(".NETFramework", new Version(4, 5));
-			_wfDesigner.Context.Services.GetService<DesignerConfigurationService>().LoadingFromUntrustedSourceEnabled = true;
-
-			//associates all of the basic activities with their designers
-			new DesignerMetadata().Register();
-
-			//load Workflow Xaml
-			_wfDesigner.Load(sourceFile);
+			return CreateInstance(sourceFile);
 		}
 
 		/// <summary>
 		/// Creates a new Workflow Designer instance (VB) with Intellisense
 		/// </summary>
 		/// <param name="sourceFile">Workflow FileName</param>
-		public static void NewInstanceVB(string sourceFile = DefaultWorkflow)
+		public static WorkflowDesigner NewInstanceVB(string sourceFile = DefaultWorkflow)
 		{
-			_expressionEditorServiceVB = new VbExpressionEditorService();
+			var wfDesigner = CreateInstance(sourceFile);
+			wfDesigner.Context.Services.Publish<IExpressionEditorService>(ExpressionEditorServiceVb);
 
-			_wfDesigner = new WorkflowDesigner();
-			_wfDesigner.Context.Services.GetService<DesignerConfigurationService>().TargetFrameworkName = new System.Runtime.Versioning.FrameworkName(".NETFramework", new Version(4, 5));
-			_wfDesigner.Context.Services.GetService<DesignerConfigurationService>().LoadingFromUntrustedSourceEnabled = true;
-			_wfDesigner.Context.Services.Publish<IExpressionEditorService>(_expressionEditorServiceVB);
-
-			//associates all of the basic activities with their designers
-			new DesignerMetadata().Register();
-
-			//load Workflow Xaml
-			_wfDesigner.Load(sourceFile);
+			return wfDesigner;
 		}
 
 		/// <summary>
 		/// Creates a new Workflow Designer instance with C# Expression Editor
 		/// </summary>
 		/// <param name="sourceFile">Workflow FileName</param>
-		public static void NewInstanceCSharp(string sourceFile = DefaultWorkflowCSharp)
+		public static WorkflowDesigner NewInstanceCSharp(string sourceFile = DefaultWorkflowCSharp)
 		{
-			_expressionEditorService = new RoslynExpressionEditorService();
 			ExpressionTextBox.RegisterExpressionActivityEditor(new CSharpValue<string>().Language, typeof(RoslynExpressionEditor), CSharpExpressionHelper.CreateExpressionFromString);
 
-			_wfDesigner = new WorkflowDesigner();
-			_wfDesigner.Context.Services.GetService<DesignerConfigurationService>().TargetFrameworkName = new System.Runtime.Versioning.FrameworkName(".NETFramework", new Version(4, 5));
-			_wfDesigner.Context.Services.GetService<DesignerConfigurationService>().LoadingFromUntrustedSourceEnabled = true;
-			_wfDesigner.Context.Services.Publish<IExpressionEditorService>(_expressionEditorService);
+			var wfDesigner = CreateInstance(sourceFile);
+			wfDesigner.Context.Services.Publish<IExpressionEditorService>(ExpressionEditorService);
 
-			//associates all of the basic activities with their designers
-			new DesignerMetadata().Register();
-
-			//load Workflow Xaml
-			_wfDesigner.Load(sourceFile);
+			return wfDesigner;
 		}
 	}
 }
