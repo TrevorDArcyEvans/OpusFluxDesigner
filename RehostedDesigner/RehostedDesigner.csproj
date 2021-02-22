@@ -242,6 +242,7 @@
     <Compile Include="CSharpExpressionEditor\ExpressionValidationContext.cs" />
     <Compile Include="CSharpExpressionEditor\LineToHeightConverter.cs" />
     <Compile Include="CSharpExpressionEditor\ParserContext.cs" />
+    <Compile Include="Helpers\BreakpointCommands.cs" />
     <Compile Include="Helpers\ConsoleWriter.cs" />
     <Compile Include="Helpers\ConsoleWriterEventArgs.cs" />
     <Compile Include="Helpers\QueryCompletionData.cs" />
@@ -322,6 +323,9 @@
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Menu\breakpoint.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
