@@ -82,23 +82,6 @@ namespace RehostedWorkflowDesigner.Views
 		}
 
 		/// <summary>
-		/// Show execution log in ui
-		/// </summary>
-		private void UpdateTrackingData()
-		{
-			//retrieve & display execution log
-			//ConsoleExecutionLog.Dispatcher.Invoke(
-			//    System.Windows.Threading.DispatcherPriority.Normal,
-			//    new Action(
-			//        delegate ()
-			//        {
-			//            //ConsoleExecutionLog.Text = _executionLog.TrackData;
-			NotifyPropertyChanged(nameof(ExecutionLog));
-			//        }
-			//));
-		}
-
-		/// <summary>
 		/// Retrieves all Workflow Activities from the loaded assemblies and inserts them into a ToolboxControl 
 		/// </summary>
 		private void InitializeActivitiesToolbox()
@@ -200,7 +183,6 @@ namespace RehostedWorkflowDesigner.Views
 			{
 				// retrieve & display execution log
 				_timer.Stop();
-				UpdateTrackingData();
 
 				// retrieve & display execution output
 				foreach (var item in ev.Outputs)
@@ -263,7 +245,6 @@ namespace RehostedWorkflowDesigner.Views
 			{
 				_wfApp.Abort("Stopped by User");
 				_timer.Stop();
-				UpdateTrackingData();
 			}
 		}
 
