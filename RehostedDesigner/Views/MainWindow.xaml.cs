@@ -15,11 +15,11 @@ using System.Activities.Tracking;
 using System.Reflection;
 using System.IO;
 using System.Activities.XamlIntegration;
+using System.Collections.ObjectModel;
 using Microsoft.Win32;
 using RehostedWorkflowDesigner.Helpers;
 using System.Diagnostics;
 using System.Threading;
-using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace RehostedWorkflowDesigner.Views
@@ -65,10 +65,8 @@ namespace RehostedWorkflowDesigner.Views
 		private WorkflowApplication _wfApp;
 		private string _currentWorkflowFile = string.Empty;
 
-		private readonly Dictionary<int, SourceLocation> _textLineToSourceLocationMap = new Dictionary<int, SourceLocation>();
 		private readonly Dictionary<object, SourceLocation> _designerSourceLocationMapping = new Dictionary<object, SourceLocation>();
 		private Dictionary<object, SourceLocation> _wfElementToSourceLocationMap;
-		private int _lineIndex;
 
 		private AutoResetEvent _resumeRuntimeFromHost;
 		private readonly List<SourceLocation> _breakpointList = new List<SourceLocation>();
@@ -76,6 +74,8 @@ namespace RehostedWorkflowDesigner.Views
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			DataContext = this;
 
 			// load all available workflow activities from loaded assemblies 
 			InitializeActivitiesToolbox();
@@ -90,6 +90,8 @@ namespace RehostedWorkflowDesigner.Views
 
 			_executionLog.TrackingRecordReceived += ExecutionLog_OnTrackingRecordReceived;
 		}
+
+		public ObservableCollection<TrackingRecordInfo> TrackingRecordInfos { get; set; } = new ObservableCollection<TrackingRecordInfo>();
 
 		private void WorkflowDesigner_OnModelChanged(object sender, EventArgs e)
 		{
@@ -115,11 +117,9 @@ namespace RehostedWorkflowDesigner.Views
 
 				Dispatcher.Invoke(DispatcherPriority.SystemIdle, (Action)(() =>
 				{
-					// Text box Updates
-					ConsoleExecutionLog.AppendText(e.Activity.DisplayName + " " + ((ActivityStateRecord)e.Record).State + Environment.NewLine);
-					ConsoleExecutionLog.AppendText($"******************{Environment.NewLine}");
-					_textLineToSourceLocationMap.Add(_lineIndex, _wfElementToSourceLocationMap[e.Activity]);
-					_lineIndex += 2;
+					// updates ConsoleExecutionLog
+					var tri = new TrackingRecordInfo(e.Record, e.Timeout, e.Activity, _wfElementToSourceLocationMap[e.Activity]);
+					TrackingRecordInfos.Add(tri);
 
 					// Add a sleep so that the debug adornments are visible to the user
 					Thread.Sleep(TimeSpan.FromMilliseconds(500));
@@ -130,31 +130,14 @@ namespace RehostedWorkflowDesigner.Views
 		// Provide Debug Adornment on the selected Activity
 		private void ConsoleExecutionLog_SelectionChanged(object sender, RoutedEventArgs e)
 		{
-			string text = ConsoleExecutionLog.Text;
-
-			int index = 0;
-			int lineClicked = 0;
-			while (index < text.Length)
-			{
-				if (text[index] == '\n')
-				{
-					lineClicked++;
-				}
-
-				if (ConsoleExecutionLog.SelectionStart <= index)
-				{
-					break;
-				}
-
-				index++;
-			}
+			var tri = (TrackingRecordInfo)ConsoleExecutionLog.SelectedItem;
 
 			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
 			{
 				try
 				{
 					// Tell Debug Service that the Line Clicked is _______
-					_wfDesigner.DebugManagerView.CurrentLocation = _textLineToSourceLocationMap[lineClicked];
+					_wfDesigner.DebugManagerView.CurrentLocation = tri?.SourceLocation;
 				}
 				catch (Exception)
 				{
@@ -162,11 +145,6 @@ namespace RehostedWorkflowDesigner.Views
 					_wfDesigner.DebugManagerView.CurrentLocation = new SourceLocation(_currentWorkflowFile, 1, 1, 1, 10);
 				}
 			}));
-		}
-
-		private void ConsoleExecutionLog_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			ConsoleExecutionLog.ScrollToEnd();
 		}
 
 		private void InitializeActivitiesToolbox()
@@ -257,6 +235,17 @@ namespace RehostedWorkflowDesigner.Views
 			{
 				MessageBox.Show(ex.Message);
 			}
+		}
+
+		private void WfExecutionCompleted(WorkflowApplicationCompletedEventArgs e)
+		{
+			_resumeRuntimeFromHost = null;
+
+			// This is to remove the final debug adornment
+			Dispatcher.Invoke(DispatcherPriority.Render, (Action)(() =>
+			{
+				_wfDesigner.DebugManagerView.CurrentLocation = new SourceLocation(_currentWorkflowFile, 1, 1, 1, 10);
+			}));
 		}
 
 		// Show the Debug Adornment
@@ -382,7 +371,7 @@ namespace RehostedWorkflowDesigner.Views
 
 		private void ResetUI()
 		{
-			ConsoleExecutionLog.Clear();
+			TrackingRecordInfos.Clear();
 			ConsoleOutput.Clear();
 		}
 
@@ -390,8 +379,6 @@ namespace RehostedWorkflowDesigner.Views
 		{
 			// Updating the mapping between Model item and Source Location before we run the workflow so that BP setting can re-use that information from the DesignerSourceLocationMapping.
 			_designerSourceLocationMapping.Clear();
-			_textLineToSourceLocationMap.Clear();
-			_lineIndex = 0;
 			_wfElementToSourceLocationMap = UpdateSourceLocationMappingInDebuggerService();
 			_executionLog.ActivityIdToWorkflowElementMap = BuildActivityIdToWfElementMap(_wfElementToSourceLocationMap);
 		}
@@ -428,20 +415,13 @@ namespace RehostedWorkflowDesigner.Views
 				// configure workflow application
 				_wfApp = new WorkflowApplication(activityExecute);
 				_wfApp.Extensions.Add(_executionLog);
+				_wfApp.Completed = WfExecutionCompleted;
 
 				// execute 
 				ThreadPool.QueueUserWorkItem(context =>
 				{
 					// Start the Runtime
 					_wfApp.Run(TimeSpan.FromHours(1));
-
-					_resumeRuntimeFromHost = null;
-
-					// This is to remove the final debug adornment
-					Dispatcher.Invoke(DispatcherPriority.Render, (Action)(() =>
-					{
-						_wfDesigner.DebugManagerView.CurrentLocation = new SourceLocation(_currentWorkflowFile, 1, 1, 1, 10);
-					}));
 				});
 			}
 			else

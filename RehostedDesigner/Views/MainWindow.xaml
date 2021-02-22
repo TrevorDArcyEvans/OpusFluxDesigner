@@ -65,17 +65,16 @@
             <StatusBarItem x:Name="LabelStatusBar" Foreground="White" FontSize="12">
             </StatusBarItem>
         </StatusBar>
-        <TextBox 
+        <ListView 
             x:Name="ConsoleExecutionLog" 
             ScrollViewer.VerticalScrollBarVisibility="Auto" 
             Grid.Column="1" 
             Grid.Row="2" 
             FontFamily="Consolas"
-            IsReadOnly="True" 
             Margin="3,40,0,0" 
             HorizontalAlignment="Left" 
             Width="329" 
-            TextChanged="ConsoleExecutionLog_TextChanged" 
+            ItemsSource="{Binding TrackingRecordInfos}"
             SelectionChanged="ConsoleExecutionLog_SelectionChanged"  />
         <TextBox 
             x:Name="ConsoleOutput" 
