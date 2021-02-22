@@ -424,6 +424,7 @@ namespace RehostedWorkflowDesigner.Views
 				_wfApp = new WorkflowApplication(activityExecute);
 				_wfApp.Extensions.Add(_executionLog);
 				_wfApp.Completed = WfExecutionCompleted;
+        // TODO   support _wfApp.Aborted
 
 				// execute 
 				ThreadPool.QueueUserWorkItem(context =>
