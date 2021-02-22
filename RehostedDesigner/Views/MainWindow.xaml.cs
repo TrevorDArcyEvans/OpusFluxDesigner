@@ -64,8 +64,10 @@ namespace RehostedWorkflowDesigner.Views
 		private WorkflowApplication _wfApp;
 		private string _currentWorkflowFile = string.Empty;
 
+		private readonly Dictionary<int, SourceLocation> _textLineToSourceLocationMap = new Dictionary<int, SourceLocation>();
 		private readonly Dictionary<object, SourceLocation> _designerSourceLocationMapping = new Dictionary<object, SourceLocation>();
 		private Dictionary<object, SourceLocation> _wfElementToSourceLocationMap;
+		private int _lineIndex;
 
 		public MainWindow()
 		{
@@ -107,11 +109,50 @@ namespace RehostedWorkflowDesigner.Views
 					// Text box Updates
 					ConsoleExecutionLog.AppendText(e.Activity.DisplayName + " " + ((ActivityStateRecord)e.Record).State + Environment.NewLine);
 					ConsoleExecutionLog.AppendText($"******************{Environment.NewLine}");
+					_textLineToSourceLocationMap.Add(_lineIndex, _wfElementToSourceLocationMap[e.Activity]);
+					_lineIndex += 2;
 
 					// Add a sleep so that the debug adornments are visible to the user
 					Thread.Sleep(TimeSpan.FromMilliseconds(500));
 				}));
 			}
+		}
+
+		// Provide Debug Adornment on the selected Activity
+		private void ConsoleExecutionLog_SelectionChanged(object sender, RoutedEventArgs e)
+		{
+			string text = ConsoleExecutionLog.Text;
+
+			int index = 0;
+			int lineClicked = 0;
+			while (index < text.Length)
+			{
+				if (text[index] == '\n')
+				{
+					lineClicked++;
+				}
+
+				if (ConsoleExecutionLog.SelectionStart <= index)
+				{
+					break;
+				}
+
+				index++;
+			}
+
+			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
+			{
+				try
+				{
+					// Tell Debug Service that the Line Clicked is _______
+					CustomWfDesigner.Instance.DebugManagerView.CurrentLocation = _textLineToSourceLocationMap[lineClicked];
+				}
+				catch (Exception)
+				{
+					// If the user clicks other than on the tracking records themselves.
+					CustomWfDesigner.Instance.DebugManagerView.CurrentLocation = new SourceLocation(_currentWorkflowFile, 1, 1, 1, 10);
+				}
+			}));
 		}
 
 		private void ConsoleExecutionLog_TextChanged(object sender, TextChangedEventArgs e)
@@ -359,6 +400,8 @@ namespace RehostedWorkflowDesigner.Views
 
 			// Updating the mapping between Model item and Source Location before we run the workflow so that BP setting can re-use that information from the DesignerSourceLocationMapping.
 			_designerSourceLocationMapping.Clear();
+			_textLineToSourceLocationMap.Clear();
+			_lineIndex = 0;
 			_wfElementToSourceLocationMap = UpdateSourceLocationMappingInDebuggerService();
 			Dictionary<string, Activity> activityIdToWfElementMap = BuildActivityIdToWfElementMap(_wfElementToSourceLocationMap);
 			_executionLog.ActivityIdToWorkflowElementMap = activityIdToWfElementMap;
