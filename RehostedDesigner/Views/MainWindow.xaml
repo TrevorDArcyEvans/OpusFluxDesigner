@@ -10,8 +10,8 @@
         <CommandBinding Command="mw:CustomCommands.CmdWfNewVB" Executed="CmdWorkflowNewVB" />
         <CommandBinding Command="mw:CustomCommands.CmdWfRun" Executed="CmdWorkflowRun" />
         <CommandBinding Command="mw:CustomCommands.CmdWfStop" Executed="CmdWorkflowStop" />
-    </Window.CommandBindings>  
-    
+    </Window.CommandBindings>
+
     <Grid x:Name="wfGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -24,7 +24,7 @@
             <RowDefinition />
             <RowDefinition Height="21"/>
         </Grid.RowDefinitions>
-        
+
         <Ribbon x:Name="Ribbon" Grid.ColumnSpan="3">
             <Ribbon.HelpPaneContent>
                 <RibbonButton/>
@@ -56,16 +56,33 @@
             </RibbonTab>
         </Ribbon>
 
-        
         <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeDirection="Columns" Margin="0" Padding="0" Background = "Gray" Width = "2" />
         <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeDirection="Columns" Margin="0" Padding="0" Background = "Gray" Width = "2" />
-        
+
         <StatusBar HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="3" Height="21" Grid.ColumnSpan="3" Background="Gray">
             <StatusBarItem x:Name="LabelStatusBar" Foreground="White" FontSize="12">
             </StatusBarItem>
         </StatusBar>
-        <TextBox x:Name="ConsoleExecutionLog" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Column="1" Grid.Row="2" IsReadOnly="True" Margin="3,40,0,0" HorizontalAlignment="Left" Width="329" TextChanged="ConsoleExecutionLog_TextChanged"  />
-        <TextBox x:Name="ConsoleOutput" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Column="1" Grid.Row="2" IsReadOnly="True" Margin="348,40,3,0" />
+        <TextBox 
+            x:Name="ConsoleExecutionLog" 
+            ScrollViewer.VerticalScrollBarVisibility="Auto" 
+            Grid.Column="1" 
+            Grid.Row="2" 
+            FontFamily="Consolas"
+            IsReadOnly="True" 
+            Margin="3,40,0,0" 
+            HorizontalAlignment="Left" 
+            Width="329" 
+            TextChanged="ConsoleExecutionLog_TextChanged" 
+            SelectionChanged="ConsoleExecutionLog_SelectionChanged"  />
+        <TextBox 
+            x:Name="ConsoleOutput" 
+            ScrollViewer.VerticalScrollBarVisibility="Auto" 
+            Grid.Column="1" 
+            Grid.Row="2" 
+            FontFamily="Consolas"
+            IsReadOnly="True" 
+            Margin="348,40,3,0" />
         <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Height="34" Content="Execution Log" Margin="3,15,0,0" FontWeight="Bold" />
         <Label Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" Height="34" Content="Output" Margin="348,15,0,0" FontWeight="Bold" />
 
