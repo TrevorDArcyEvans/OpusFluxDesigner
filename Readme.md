@@ -1,6 +1,6 @@
 # .NET Rehosted Workflow Designer #
 
-![Alt text](rehosted-workflow-designer.png ".NET Rehosted Workflow Designer")
+![.NET Rehosted Workflow Designer](rehosted-workflow-designer.png ".NET Rehosted Workflow Designer")
 
 The solution contains:
 
@@ -8,7 +8,7 @@ The solution contains:
 * Workflow Designer - Rehosting in a WPF Aplication 
 * ToolboxControl - Loading Workflow Activities from Assemblies
 * Workflow Execution - retrieve real-time Execution Log (TrackData) and Execution Output(s)
-* Workflow Management - New / Open / Save / Run / Stop
+* Workflow Management - New / Open / Save / Run / Stop / Debug
 
 ## Activity Library - Custom Activities ##
 * ShowMessageBox - displays in a MessageBox the Value of the InputData argument
