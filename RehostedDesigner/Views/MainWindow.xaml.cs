@@ -375,6 +375,11 @@ namespace RehostedWorkflowDesigner.Views
 
 		#region Commands Handlers - Executed - New, Open, Save, Run
 
+		private void CmdExit(object sender, ExecutedRoutedEventArgs e)
+		{
+			Application.Current.Shutdown();
+		}
+
 		/// <summary>
 		/// Creates a new Workflow Application instance and executes the Current Workflow
 		/// </summary>

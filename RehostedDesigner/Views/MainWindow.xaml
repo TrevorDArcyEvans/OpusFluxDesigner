@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
         xmlns:mw="clr-namespace:RehostedWorkflowDesigner.Helpers" Title="Rehosted WF Designer Showcase">
     <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="CmdExit"/>
         <CommandBinding Command="ApplicationCommands.New" Executed="CmdWorkflowNew"/>
         <CommandBinding Command="ApplicationCommands.Open" Executed="CmdWorkflowOpen"/>
         <CommandBinding Command="ApplicationCommands.Save" Executed="CmdWorkflowSave"/>
@@ -12,7 +13,7 @@
         <CommandBinding Command="mw:CustomCommands.CmdWfStop" Executed="CmdWorkflowStop" />
     </Window.CommandBindings>
 
-    <Grid x:Name="wfGrid">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="3*" />
@@ -25,18 +26,10 @@
             <RowDefinition Height="21"/>
         </Grid.RowDefinitions>
 
-        <Ribbon x:Name="Ribbon" Grid.ColumnSpan="3">
-            <Ribbon.HelpPaneContent>
-                <RibbonButton/>
-            </Ribbon.HelpPaneContent>
-            <Ribbon.QuickAccessToolBar>
-                <RibbonQuickAccessToolBar >
-                    <RibbonButton x:Name="QATButton1" SmallImageSource="/Rehosted WF Designer;component/Resources/Menu/save.png"/>
-                </RibbonQuickAccessToolBar>
-            </Ribbon.QuickAccessToolBar>
+        <Ribbon Grid.ColumnSpan="3">
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu>
-                    <RibbonApplicationMenuItem Header="Exit" x:Name="MenuItem1" ImageSource="/Rehosted WF Designer;component/Resources/Menu/exit.png" Command="ApplicationCommands.Close"/>
+                    <RibbonApplicationMenuItem Header="Exit" ImageSource="/Rehosted WF Designer;component/Resources/Menu/exit.png" Command="ApplicationCommands.Close" />
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>
             <RibbonTab x:Name="WorkflowTab" Header="Workflow">
