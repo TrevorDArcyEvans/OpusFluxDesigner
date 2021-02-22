@@ -358,6 +358,7 @@ namespace RehostedWorkflowDesigner.Views
 			_wfApp.Completed = WfExecutionCompleted;
 
 			// Updating the mapping between Model item and Source Location before we run the workflow so that BP setting can re-use that information from the DesignerSourceLocationMapping.
+			_designerSourceLocationMapping.Clear();
 			_wfElementToSourceLocationMap = UpdateSourceLocationMappingInDebuggerService();
 			Dictionary<string, Activity> activityIdToWfElementMap = BuildActivityIdToWfElementMap(_wfElementToSourceLocationMap);
 			_executionLog.ActivityIdToWorkflowElementMap = activityIdToWfElementMap;
