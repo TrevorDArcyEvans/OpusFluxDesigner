@@ -221,23 +221,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Page>
     <None Include="packages.config" />
-    <None Include="SampleWorkflow\meetup.xaml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Include="SampleWorkflow\AzureVmPowerOperations.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="SampleWorkflow\LocalWinServicesCSV.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="SampleWorkflow\SvcMonitoring.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <Page Include="DefaultWorkflowCSharp.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -330,12 +313,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Menu\exit.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ActivityLibraries\MeetupActivityLibrary\MeetupActivityLibrary.csproj">
-      <Project>{9212f9e7-b12c-4fba-af4d-ea9b42a2aafd}</Project>
-      <Name>MeetupActivityLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\ExpressionEditor\Event.png" />
