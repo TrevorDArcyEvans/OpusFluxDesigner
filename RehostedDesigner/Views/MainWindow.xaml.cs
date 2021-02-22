@@ -17,7 +17,6 @@ using System.IO;
 using System.Activities.XamlIntegration;
 using Microsoft.Win32;
 using RehostedWorkflowDesigner.Helpers;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Controls;
@@ -25,7 +24,7 @@ using System.Windows.Threading;
 
 namespace RehostedWorkflowDesigner.Views
 {
-	public partial class MainWindow : INotifyPropertyChanged
+	public sealed partial class MainWindow
 	{
 		private const string All = "*";
 
@@ -98,7 +97,7 @@ namespace RehostedWorkflowDesigner.Views
 			RegenerateSourceDebuggerMappings();
 		}
 
-		public void ConsoleWriter_WriteEvent(object sender, ConsoleWriterEventArgs e)
+		private void ConsoleWriter_WriteEvent(object sender, ConsoleWriterEventArgs e)
 		{
 			Dispatcher.Invoke(DispatcherPriority.SystemIdle, (Action)(() =>
 			{
@@ -545,18 +544,6 @@ namespace RehostedWorkflowDesigner.Views
 				_wfDesigner.Context.Services.GetService<IDesignerDebugView>().UpdateBreakpoint(srcLoc, BreakpointTypes.None);
 				_breakpointList.Remove(srcLoc);
 			}
-		}
-
-		#endregion
-
-		#region INotify
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		private void NotifyPropertyChanged(String propertyName)
-		{
-			var handler = PropertyChanged;
-			handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		#endregion
