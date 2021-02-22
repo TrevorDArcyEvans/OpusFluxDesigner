@@ -92,3 +92,6 @@ The solution contains:
 * [WF4 Designer Rehosting: get Scoped Variables
 ](https://adrianot75.wordpress.com/2010/11/23/wf4-designer-rehosting-get-scoped-variables/)
 
+## Miscellaneous
+* [Workflow icon](https://www.visualpharm.com/free-icons/workflow-595b40b85ba036ed117dc5ff)
+
