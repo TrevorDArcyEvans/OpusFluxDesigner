@@ -2,9 +2,6 @@
 
 namespace RehostedWorkflowDesigner.Helpers
 {
-    /// <summary>
-    /// Custom Commands
-    /// </summary>
     public static class CustomCommands
     {
         public static ICommand CmdWfNewCSharp = new RoutedCommand("CmdWfNewCSharp", typeof(CustomCommands));

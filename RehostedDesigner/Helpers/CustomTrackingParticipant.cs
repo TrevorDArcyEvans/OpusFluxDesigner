@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Activities.Tracking;
-using System.IO;
+using System.Globalization;
 
 namespace RehostedWorkflowDesigner.Helpers
 {
-
     /// <summary>
     /// Workflow Tracking Participant - Custom Implementation
     /// </summary>
@@ -23,11 +18,9 @@ namespace RehostedWorkflowDesigner.Helpers
         /// <param name="timeStamp">Timestamp</param>
         protected override void Track(TrackingRecord trackRecord, TimeSpan timeStamp)
         {
-            ActivityStateRecord recordEntry = trackRecord as ActivityStateRecord;
-
-            if (recordEntry != null)
+	        if (trackRecord is ActivityStateRecord recordEntry)
             {
-                TrackData += String.Format("[{0}] [{1}] [{2}]" + Environment.NewLine, recordEntry.EventTime.ToLocalTime().ToString(), recordEntry.Activity.Name, recordEntry.State);
+                TrackData += string.Format("[{0}] [{1}] [{2}]" + Environment.NewLine, recordEntry.EventTime.ToLocalTime().ToString(CultureInfo.InvariantCulture), recordEntry.Activity.Name, recordEntry.State);
             }
         }
     }
