@@ -109,22 +109,24 @@ namespace RehostedWorkflowDesigner.Views
 
 		private void ExecutionLog_OnTrackingRecordReceived(object sender, TrackingEventArgs e)
 		{
-			if (e.Activity != null)
+			if (e.Activity == null)
 			{
-				Debug.WriteLine($"<+=+=+=+> Activity Tracking Record Received for ActivityId: {e.Activity.Id}, record: {e.Record} ");
-
-				ShowDebug(_wfElementToSourceLocationMap[e.Activity]);
-
-				Dispatcher.Invoke(DispatcherPriority.SystemIdle, (Action)(() =>
-				{
-					// updates ConsoleExecutionLog
-					var tri = new TrackingRecordInfo(e.Record, e.Timeout, e.Activity, _wfElementToSourceLocationMap[e.Activity]);
-					TrackingRecordInfos.Add(tri);
-
-					// Add a sleep so that the debug adornments are visible to the user
-					Thread.Sleep(TimeSpan.FromMilliseconds(500));
-				}));
+				return;
 			}
+
+			Debug.WriteLine($"<+=+=+=+> Activity Tracking Record Received for ActivityId: {e.Activity.Id}, record: {e.Record} ");
+
+			ShowDebug(_wfElementToSourceLocationMap[e.Activity]);
+
+			Dispatcher.Invoke(DispatcherPriority.SystemIdle, (Action)(() =>
+			{
+				// updates ConsoleExecutionLog
+				var tri = new TrackingRecordInfo(e.Record, e.Timeout, e.Activity, _wfElementToSourceLocationMap[e.Activity]);
+				TrackingRecordInfos.Add(tri);
+
+				// Add a sleep so that the debug adornments are visible to the user
+				Thread.Sleep(TimeSpan.FromMilliseconds(500));
+			}));
 		}
 
 		// Provide Debug Adornment on the selected Activity
