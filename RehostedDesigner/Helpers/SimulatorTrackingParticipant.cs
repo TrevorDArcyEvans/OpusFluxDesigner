@@ -9,7 +9,7 @@ namespace RehostedWorkflowDesigner.Helpers
 	/// <summary>
 	/// Workflow Tracking Participant - Custom Implementation
 	/// </summary>
-	public sealed class CustomTrackingParticipant : TrackingParticipant
+	public sealed class SimulatorTrackingParticipant : TrackingParticipant
 	{
 		public event EventHandler<TrackingEventArgs> TrackingRecordReceived;
 

@@ -252,7 +252,7 @@
     <Compile Include="CSharpExpressionEditor\RoslynExpressionEditorService.cs" />
     <Compile Include="CSharpExpressionEditor\XamlUtilities.cs" />
     <Compile Include="Helpers\CustomCommands.cs" />
-    <Compile Include="Helpers\CustomTrackingParticipant.cs" />
+    <Compile Include="Helpers\SimulatorTrackingParticipant.cs" />
     <Compile Include="Helpers\CustomWfDesigner.cs" />
     <Compile Include="Helpers\TrackingEventArgs.cs" />
     <Compile Include="VbExpressionEditor\VbExpressionEditorInstance.cs" />

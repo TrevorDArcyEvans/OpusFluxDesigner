@@ -23,7 +23,7 @@ namespace RehostedWorkflowDesigner.Views
 	{
 		private WorkflowApplication _wfApp;
 		private readonly ToolboxControl _wfToolbox = new ToolboxControl();
-		private readonly CustomTrackingParticipant _executionLog = new CustomTrackingParticipant();
+		private readonly SimulatorTrackingParticipant _executionLog = new SimulatorTrackingParticipant();
 		private string _currentWorkflowFile = string.Empty;
 		private readonly ConsoleWriter _consoleWriter = new ConsoleWriter();
 
