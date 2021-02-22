@@ -13,8 +13,8 @@ namespace RehostedWorkflowDesigner.Helpers
 	/// </summary>
 	internal static class CustomWfDesigner
 	{
-		private const string DefaultWorkflow = "defaultWorkflow.xaml";
-		private const string DefaultWorkflowCSharp = "defaultWorkflowCSharp.xaml";
+		private const string DefaultWorkflow = "DefaultWorkflow.xaml";
+		private const string DefaultWorkflowCSharp = "DefaultWorkflowCSharp.xaml";
 
 		private static WorkflowDesigner _wfDesigner;
 		private static RoslynExpressionEditorService _expressionEditorService;
