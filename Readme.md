@@ -1,6 +1,6 @@
 # .NET Rehosted Workflow Designer #
 
-![Alt text](https://github.com/orosandrei/Rehosted-Workflow-Designer/raw/master/rehosted-workflow-designer.png?raw=true ".NET Rehosted Workflow Designer")
+![Alt text](rehosted-workflow-designer.png ".NET Rehosted Workflow Designer")
 
 The solution contains:
 
