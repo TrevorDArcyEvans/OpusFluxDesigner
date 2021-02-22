@@ -13,6 +13,7 @@ using Microsoft.Win32;
 using RehostedWorkflowDesigner.Helpers;
 using System.ComponentModel;
 using System.Timers;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace RehostedWorkflowDesigner.Views
@@ -20,9 +21,8 @@ namespace RehostedWorkflowDesigner.Views
 	public partial class MainWindow : INotifyPropertyChanged
 	{
 		private WorkflowApplication _wfApp;
-		private ToolboxControl _wfToolbox;
-		private CustomTrackingParticipant _executionLog;
-
+		private readonly ToolboxControl _wfToolbox = new ToolboxControl();
+		private readonly CustomTrackingParticipant _executionLog = new CustomTrackingParticipant();
 		private string _currentWorkflowFile = string.Empty;
 		private readonly Timer _timer;
 		private readonly ConsoleWriter _consoleWriter = new ConsoleWriter();
@@ -37,10 +37,10 @@ namespace RehostedWorkflowDesigner.Views
 			};
 			_timer.Elapsed += TrackingDataRefresh;
 
-			//load all available workflow activities from loaded assemblies 
+			// load all available workflow activities from loaded assemblies 
 			InitializeActivitiesToolbox();
 
-			//initialize designer
+			// initialize designer
 			WfDesignerBorder.Child = CustomWfDesigner.Instance.View;
 			WfPropertyBorder.Child = CustomWfDesigner.Instance.PropertyInspectorView;
 
@@ -54,12 +54,7 @@ namespace RehostedWorkflowDesigner.Views
 		{
 			get
 			{
-				if (_executionLog != null)
-				{
-					return _executionLog.TrackData;
-				}
-
-				return string.Empty;
+				return _executionLog.TrackData;
 			}
 			set
 			{
@@ -76,18 +71,18 @@ namespace RehostedWorkflowDesigner.Views
 			}));
 		}
 
-		private void TrackingDataRefresh(Object source, ElapsedEventArgs e)
+		private void TrackingDataRefresh(object source, ElapsedEventArgs e)
 		{
 			NotifyPropertyChanged(nameof(ExecutionLog));
 		}
 
-		private void ConsoleExecutionLog_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+		private void ConsoleExecutionLog_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			ConsoleExecutionLog.ScrollToEnd();
 		}
 
 		/// <summary>
-		/// show execution log in ui
+		/// Show execution log in ui
 		/// </summary>
 		private void UpdateTrackingData()
 		{
@@ -110,8 +105,6 @@ namespace RehostedWorkflowDesigner.Views
 		{
 			try
 			{
-				_wfToolbox = new ToolboxControl();
-
 				// load System Activity Libraries into current domain; uncomment more if libraries below available on your system
 				AppDomain.CurrentDomain.Load("System.Activities");
 				AppDomain.CurrentDomain.Load("System.ServiceModel.Activities");
@@ -176,12 +169,13 @@ namespace RehostedWorkflowDesigner.Views
 					}
 				}
 
-				//fixed ForEach
+				// fixed ForEach
 				_wfToolbox.Categories.Add(
-					   new System.Activities.Presentation.Toolbox.ToolboxCategory
+					   new ToolboxCategory
 					   {
 						   CategoryName = "CustomForEach",
-						   Tools = {
+						   Tools =
+						   {
 								new ToolboxItemWrapper(typeof(System.Activities.Core.Presentation.Factories.ForEachWithBodyFactory<>)),
 								new ToolboxItemWrapper(typeof(System.Activities.Core.Presentation.Factories.ParallelForEachWithBodyFactory<>))
 						   }
@@ -204,17 +198,17 @@ namespace RehostedWorkflowDesigner.Views
 		{
 			try
 			{
-				//retrieve & display execution log
+				// retrieve & display execution log
 				_timer.Stop();
 				UpdateTrackingData();
 
-				//retrieve & display execution output
+				// retrieve & display execution output
 				foreach (var item in ev.Outputs)
 				{
 					ConsoleOutput.Dispatcher.Invoke(
-						System.Windows.Threading.DispatcherPriority.Normal,
+						DispatcherPriority.Normal,
 						new Action(
-							delegate ()
+							delegate
 							{
 								ConsoleOutput.Text += string.Format("[{0}] {1}" + Environment.NewLine, item.Key, item.Value);
 							}
@@ -245,18 +239,17 @@ namespace RehostedWorkflowDesigner.Views
 
 			DynamicActivity activityExecute = ActivityXamlServices.Load(workflowStream, settings) as DynamicActivity;
 
-			//configure workflow application
-			ConsoleExecutionLog.Text = String.Empty;
-			ConsoleOutput.Text = String.Empty;
-			_executionLog = new CustomTrackingParticipant();
+			// configure workflow application
+			ConsoleExecutionLog.Clear();
+			ConsoleOutput.Clear();
 			_wfApp = new WorkflowApplication(activityExecute);
 			_wfApp.Extensions.Add(_executionLog);
 			_wfApp.Completed = WfExecutionCompleted;
 
-			//execute 
+			// execute 
 			_wfApp.Run();
 
-			//enable timer for real-time logging
+			// enable timer for real-time logging
 			_timer.Start();
 		}
 
@@ -265,7 +258,7 @@ namespace RehostedWorkflowDesigner.Views
 		/// </summary>
 		private void CmdWorkflowStop(object sender, ExecutedRoutedEventArgs e)
 		{
-			//manual stop
+			// manual stop
 			if (_wfApp != null)
 			{
 				_wfApp.Abort("Stopped by User");
