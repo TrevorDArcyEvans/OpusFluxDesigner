@@ -21,9 +21,41 @@ namespace RehostedWorkflowDesigner.Views
 {
 	public partial class MainWindow : INotifyPropertyChanged
 	{
+		private const string All = "*";
+
 		private WorkflowApplication _wfApp;
 		private readonly ToolboxControl _wfToolbox = new ToolboxControl();
-		private readonly SimulatorTrackingParticipant _executionLog = new SimulatorTrackingParticipant();
+		private readonly SimulatorTrackingParticipant _executionLog = new SimulatorTrackingParticipant
+		{
+			TrackingProfile = new TrackingProfile
+			{
+				Name = "SimulatorTrackingProfile",
+				Queries =
+				{
+					new CustomTrackingQuery
+					{
+						Name = All,
+						ActivityName = All
+					},
+					new WorkflowInstanceQuery
+					{
+						// Limit workflow instance tracking records for started and completed workflow states
+						States = { WorkflowInstanceStates.Started, WorkflowInstanceStates.Completed }
+					},
+					new ActivityStateQuery
+					{
+						// Subscribe for track records from all activities for all states
+						ActivityName = All,
+						States = { All },
+
+						// Extract workflow variables and arguments as a part of the activity tracking record
+						// VariableName = "*" allows for extraction of all variables in the scope of the activity
+						Variables = { All }
+					}
+				}
+			}
+		};
+
 		private string _currentWorkflowFile = string.Empty;
 		private readonly ConsoleWriter _consoleWriter = new ConsoleWriter();
 
@@ -238,7 +270,7 @@ namespace RehostedWorkflowDesigner.Views
 		{
 			if (_currentWorkflowFile == string.Empty)
 			{
-				var dialogSave = new SaveFileDialog {Title = "Save Workflow", Filter = "Workflows (.xaml)|*.xaml"};
+				var dialogSave = new SaveFileDialog { Title = "Save Workflow", Filter = "Workflows (.xaml)|*.xaml" };
 				if (dialogSave.ShowDialog() == true)
 				{
 					CustomWfDesigner.Instance.Save(dialogSave.FileName);
@@ -289,7 +321,7 @@ namespace RehostedWorkflowDesigner.Views
 		/// </summary>
 		private void CmdWorkflowOpen(object sender, ExecutedRoutedEventArgs e)
 		{
-			var dialogOpen = new OpenFileDialog {Title = "Open Workflow", Filter = "Workflows (.xaml)|*.xaml"};
+			var dialogOpen = new OpenFileDialog { Title = "Open Workflow", Filter = "Workflows (.xaml)|*.xaml" };
 
 			if (dialogOpen.ShowDialog() == true)
 			{
