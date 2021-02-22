@@ -7,9 +7,9 @@ namespace RehostedWorkflowDesigner.Helpers
     /// <summary>
     /// Workflow Tracking Participant - Custom Implementation
     /// </summary>
-    class CustomTrackingParticipant : TrackingParticipant
+    public sealed class CustomTrackingParticipant : TrackingParticipant
     {
-        public string TrackData = String.Empty;
+        public string TrackData = string.Empty;
 
         /// <summary>
         /// Appends the current TrackingRecord data to the Workflow Execution Log
