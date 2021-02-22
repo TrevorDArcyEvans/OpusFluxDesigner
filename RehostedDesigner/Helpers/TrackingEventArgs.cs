@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Activities;
 using System.Activities.Tracking;
 
 namespace RehostedWorkflowDesigner.Helpers
@@ -7,11 +8,13 @@ namespace RehostedWorkflowDesigner.Helpers
 	{
 		public TrackingRecord Record { get; set; }
 		public TimeSpan Timeout { get; set; }
+		public Activity Activity { get; set; }
 
-		public TrackingEventArgs(TrackingRecord trackingRecord, TimeSpan timeout)
+		public TrackingEventArgs(TrackingRecord trackingRecord, TimeSpan timeout, Activity activity)
 		{
 			Record = trackingRecord;
 			Timeout = timeout;
+			Activity = activity;
 		}
 	}
 }

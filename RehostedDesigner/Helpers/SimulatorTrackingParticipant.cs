@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Activities;
 using System.Activities.Tracking;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace RehostedWorkflowDesigner.Helpers
@@ -10,6 +12,7 @@ namespace RehostedWorkflowDesigner.Helpers
 	public sealed class SimulatorTrackingParticipant : TrackingParticipant
 	{
 		public event EventHandler<TrackingEventArgs> TrackingRecordReceived;
+		public Dictionary<string, Activity> ActivityIdToWorkflowElementMap { get; set; }
 
 		protected override void Track(TrackingRecord record, TimeSpan timeout)
 		{
@@ -25,10 +28,17 @@ namespace RehostedWorkflowDesigner.Helpers
 				return;
 			}
 
-			if (record is ActivityStateRecord activityStateRecord &&
-				!activityStateRecord.Activity.TypeName.Contains("System.Activities.Expressions"))
+			if (record is ActivityStateRecord activityStateRecord && 
+			    !activityStateRecord.Activity.TypeName.Contains("System.Activities.Expressions"))
 			{
-				TrackingRecordReceived(this, new TrackingEventArgs(record, timeout));
+				if (ActivityIdToWorkflowElementMap.ContainsKey(activityStateRecord.Activity.Id))
+				{
+					TrackingRecordReceived(this, new TrackingEventArgs(record, timeout, ActivityIdToWorkflowElementMap[activityStateRecord.Activity.Id]));
+				}
+			}
+			else
+			{
+				TrackingRecordReceived(this, new TrackingEventArgs(record, timeout, null));
 			}
 		}
 	}

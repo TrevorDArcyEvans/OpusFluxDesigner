@@ -5,6 +5,10 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Activities;
+using System.Activities.Debugger;
+using System.Activities.Presentation;
+using System.Activities.Presentation.Debug;
+using System.Activities.Presentation.Services;
 using System.Activities.Presentation.Toolbox;
 using System.Activities.Tracking;
 using System.Reflection;
@@ -14,6 +18,7 @@ using Microsoft.Win32;
 using RehostedWorkflowDesigner.Helpers;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -23,7 +28,6 @@ namespace RehostedWorkflowDesigner.Views
 	{
 		private const string All = "*";
 
-		private WorkflowApplication _wfApp;
 		private readonly ToolboxControl _wfToolbox = new ToolboxControl();
 		private readonly SimulatorTrackingParticipant _executionLog = new SimulatorTrackingParticipant
 		{
@@ -55,9 +59,13 @@ namespace RehostedWorkflowDesigner.Views
 				}
 			}
 		};
-
-		private string _currentWorkflowFile = string.Empty;
 		private readonly ConsoleWriter _consoleWriter = new ConsoleWriter();
+
+		private WorkflowApplication _wfApp;
+		private string _currentWorkflowFile = string.Empty;
+
+		private readonly Dictionary<object, SourceLocation> _designerSourceLocationMapping = new Dictionary<object, SourceLocation>();
+		private Dictionary<object, SourceLocation> _wfElementToSourceLocationMap;
 
 		public MainWindow()
 		{
@@ -88,15 +96,20 @@ namespace RehostedWorkflowDesigner.Views
 
 		private void ExecutionLog_OnTrackingRecordReceived(object sender, TrackingEventArgs e)
 		{
-			if (e.Record != null)
+			if (e.Activity != null)
 			{
-				Debug.WriteLine($"<+=+=+=+> Activity Tracking Record Received for record: {e.Record} ");
+				Debug.WriteLine($"<+=+=+=+> Activity Tracking Record Received for ActivityId: {e.Activity.Id}, record: {e.Record} ");
+
+				ShowDebug(_wfElementToSourceLocationMap[e.Activity]);
 
 				Dispatcher.Invoke(DispatcherPriority.SystemIdle, (Action)(() =>
 				{
 					// Text box Updates
-					ConsoleExecutionLog.AppendText(((ActivityStateRecord)e.Record).State + Environment.NewLine);
+					ConsoleExecutionLog.AppendText(e.Activity.DisplayName + " " + ((ActivityStateRecord)e.Record).State + Environment.NewLine);
 					ConsoleExecutionLog.AppendText($"******************{Environment.NewLine}");
+
+					// Add a sleep so that the debug adornments are visible to the user
+					Thread.Sleep(TimeSpan.FromMilliseconds(500));
 				}));
 			}
 		}
@@ -204,26 +217,120 @@ namespace RehostedWorkflowDesigner.Views
 		/// </summary>
 		private void WfExecutionCompleted(WorkflowApplicationCompletedEventArgs e)
 		{
-			try
+			// This is to remove the final debug adornment
+			Dispatcher.Invoke(DispatcherPriority.Render, (Action)(() =>
 			{
-				// retrieve & display execution output
-				foreach (var item in e.Outputs)
+				CustomWfDesigner.Instance.DebugManagerView.CurrentLocation = new SourceLocation(_currentWorkflowFile, 1, 1, 1, 10);
+			}));
+		}
+
+		// Show the Debug Adornment
+		private void ShowDebug(SourceLocation srcLoc)
+		{
+			Dispatcher.Invoke(DispatcherPriority.Render, (Action)(() =>
+			{
+				CustomWfDesigner.Instance.DebugManagerView.CurrentLocation = srcLoc;
+			}));
+		}
+
+		private Dictionary<string, Activity> BuildActivityIdToWfElementMap(Dictionary<object, SourceLocation> wfElementToSourceLocationMap)
+		{
+			Dictionary<string, Activity> map = new Dictionary<string, Activity>();
+
+			foreach (object instance in wfElementToSourceLocationMap.Keys)
+			{
+				if (instance is Activity wfElement)
 				{
-					ConsoleOutput.Dispatcher.Invoke(
-						DispatcherPriority.Normal,
-						new Action(
-							delegate
-							{
-								ConsoleOutput.Text += string.Format("[{0}] {1}" + Environment.NewLine, item.Key, item.Value);
-							}
-					));
+					map.Add(wfElement.Id, wfElement);
 				}
 			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.ToString());
-			}
+
+			return map;
 		}
+
+		private Dictionary<object, SourceLocation> UpdateSourceLocationMappingInDebuggerService()
+		{
+			object rootInstance = GetRootInstance();
+			Dictionary<object, SourceLocation> sourceLocationMapping = new Dictionary<object, SourceLocation>();
+
+			if (rootInstance != null)
+			{
+				Activity documentRootElement = GetRootWorkflowElement(rootInstance);
+
+				SourceLocationProvider.CollectMapping(
+					GetRootRuntimeWorkflowElement(),
+					documentRootElement,
+					sourceLocationMapping,
+					CustomWfDesigner.Instance.Context.Items.GetValue<WorkflowFileItem>().LoadedFile);
+
+				// Collect the mapping between the Model Item tree and its underlying source location
+				SourceLocationProvider.CollectMapping(
+					documentRootElement,
+					documentRootElement,
+					_designerSourceLocationMapping,
+				   CustomWfDesigner.Instance.Context.Items.GetValue<WorkflowFileItem>().LoadedFile);
+			}
+
+			// Notify the DebuggerService of the new sourceLocationMapping.
+			// When rootInstance == null, it'll just reset the mapping.
+			// DebuggerService debuggerService = debuggerService as DebuggerService;
+			var debuggerService = CustomWfDesigner.Instance.DebugManagerView;
+			((DebuggerService)debuggerService)?.UpdateSourceLocations(_designerSourceLocationMapping);
+
+			return sourceLocationMapping;
+		}
+
+		#region Helper Methods
+
+		private object GetRootInstance()
+		{
+			ModelService modelService = CustomWfDesigner.Instance.Context.Services.GetService<ModelService>();
+			return modelService?.Root.GetCurrentValue();
+		}
+
+		// Get root WorkflowElement.  Currently only handle when the object is ActivitySchemaType or WorkflowElement.
+		// May return null if it does not know how to get the root activity.
+		private Activity GetRootWorkflowElement(object rootModelObject)
+		{
+			Debug.Assert(rootModelObject != null, "Cannot pass null as rootModelObject");
+
+			Activity rootWorkflowElement;
+			IDebuggableWorkflowTree debuggableWorkflowTree = rootModelObject as IDebuggableWorkflowTree;
+			if (debuggableWorkflowTree != null)
+			{
+				rootWorkflowElement = debuggableWorkflowTree.GetWorkflowRoot();
+			}
+			else // Loose xaml case.
+			{
+				rootWorkflowElement = rootModelObject as Activity;
+			}
+
+			return rootWorkflowElement;
+		}
+
+		private Activity GetRootRuntimeWorkflowElement()
+		{
+			// get workflow source from designer
+			CustomWfDesigner.Instance.Flush();
+			MemoryStream workflowStream = new MemoryStream(Encoding.Default.GetBytes(CustomWfDesigner.Instance.Text));
+
+			ActivityXamlServicesSettings settings = new ActivityXamlServicesSettings()
+			{
+				CompileExpressions = true
+			};
+
+			Activity root = ActivityXamlServices.Load(workflowStream, settings);
+			WorkflowInspectionServices.CacheMetadata(root);
+
+			IEnumerator<Activity> enumerator1 = WorkflowInspectionServices.GetActivities(root).GetEnumerator();
+			// Get the first child of the x:class
+			enumerator1.MoveNext();
+			root = enumerator1.Current;
+
+			return root;
+		}
+
+		#endregion
 
 		#region Commands Handlers - Executed - New, Open, Save, Run
 
@@ -249,6 +356,11 @@ namespace RehostedWorkflowDesigner.Views
 			_wfApp = new WorkflowApplication(activityExecute);
 			_wfApp.Extensions.Add(_executionLog);
 			_wfApp.Completed = WfExecutionCompleted;
+
+			// Updating the mapping between Model item and Source Location before we run the workflow so that BP setting can re-use that information from the DesignerSourceLocationMapping.
+			_wfElementToSourceLocationMap = UpdateSourceLocationMappingInDebuggerService();
+			Dictionary<string, Activity> activityIdToWfElementMap = BuildActivityIdToWfElementMap(_wfElementToSourceLocationMap);
+			_executionLog.ActivityIdToWorkflowElementMap = activityIdToWfElementMap;
 
 			// execute 
 			_wfApp.Run();
@@ -321,7 +433,11 @@ namespace RehostedWorkflowDesigner.Views
 		/// </summary>
 		private void CmdWorkflowOpen(object sender, ExecutedRoutedEventArgs e)
 		{
-			var dialogOpen = new OpenFileDialog { Title = "Open Workflow", Filter = "Workflows (.xaml)|*.xaml" };
+			var dialogOpen = new OpenFileDialog
+			{
+				Title = "Open Workflow",
+				Filter = "Workflows (.xaml)|*.xaml"
+			};
 
 			if (dialogOpen.ShowDialog() == true)
 			{
