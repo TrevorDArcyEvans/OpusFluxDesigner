@@ -157,10 +157,16 @@ namespace RehostedWorkflowDesigner.Views
 				AppDomain.CurrentDomain.Load("System.Activities");
 				AppDomain.CurrentDomain.Load("System.ServiceModel.Activities");
 				AppDomain.CurrentDomain.Load("System.Activities.Core.Presentation");
+
+        // Microsoft.Workflow.Client.dll?
 				//AppDomain.CurrentDomain.Load("Microsoft.Workflow.Management");
+
+        // https://www.nuget.org/packages/Microsoft.Activities.Extensions/
 				//AppDomain.CurrentDomain.Load("Microsoft.Activities.Extensions");
 				//AppDomain.CurrentDomain.Load("Microsoft.Activities");
 				//AppDomain.CurrentDomain.Load("Microsoft.Activities.Hosting");
+
+        // https://www.nuget.org/packages/Microsoft.PowerShell.5.ReferenceAssemblies/
 				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Utility.Activities");
 				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Security.Activities");
 				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Management.Activities");
