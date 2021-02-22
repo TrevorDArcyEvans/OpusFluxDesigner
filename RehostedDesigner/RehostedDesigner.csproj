@@ -254,6 +254,7 @@
     <Compile Include="Helpers\CustomCommands.cs" />
     <Compile Include="Helpers\CustomTrackingParticipant.cs" />
     <Compile Include="Helpers\CustomWfDesigner.cs" />
+    <Compile Include="Helpers\TrackingEventArgs.cs" />
     <Compile Include="VbExpressionEditor\VbExpressionEditorInstance.cs" />
     <Compile Include="VbExpressionEditor\VbExpressionEditorService.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">

@@ -6,13 +6,14 @@ using System.Windows;
 using System.Windows.Input;
 using System.Activities;
 using System.Activities.Presentation.Toolbox;
+using System.Activities.Tracking;
 using System.Reflection;
 using System.IO;
 using System.Activities.XamlIntegration;
 using Microsoft.Win32;
 using RehostedWorkflowDesigner.Helpers;
 using System.ComponentModel;
-using System.Timers;
+using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -24,18 +25,11 @@ namespace RehostedWorkflowDesigner.Views
 		private readonly ToolboxControl _wfToolbox = new ToolboxControl();
 		private readonly CustomTrackingParticipant _executionLog = new CustomTrackingParticipant();
 		private string _currentWorkflowFile = string.Empty;
-		private readonly Timer _timer;
 		private readonly ConsoleWriter _consoleWriter = new ConsoleWriter();
 
 		public MainWindow()
 		{
 			InitializeComponent();
-
-			_timer = new Timer(1000)
-			{
-				Enabled = false
-			};
-			_timer.Elapsed += TrackingDataRefresh;
 
 			// load all available workflow activities from loaded assemblies 
 			InitializeActivitiesToolbox();
@@ -48,19 +42,8 @@ namespace RehostedWorkflowDesigner.Views
 			_consoleWriter.WriteLineEvent += ConsoleWriter_WriteEvent;
 
 			Console.SetOut(_consoleWriter);
-		}
 
-		public string ExecutionLog
-		{
-			get
-			{
-				return _executionLog.TrackData;
-			}
-			set
-			{
-				_executionLog.TrackData = value;
-				NotifyPropertyChanged(nameof(ExecutionLog));
-			}
+			_executionLog.TrackingRecordReceived += ExecutionLog_OnTrackingRecordReceived;
 		}
 
 		public void ConsoleWriter_WriteEvent(object sender, ConsoleWriterEventArgs e)
@@ -71,9 +54,19 @@ namespace RehostedWorkflowDesigner.Views
 			}));
 		}
 
-		private void TrackingDataRefresh(object source, ElapsedEventArgs e)
+		private void ExecutionLog_OnTrackingRecordReceived(object sender, TrackingEventArgs e)
 		{
-			NotifyPropertyChanged(nameof(ExecutionLog));
+			if (e.Record != null)
+			{
+				Debug.WriteLine($"<+=+=+=+> Activity Tracking Record Received for record: {e.Record} ");
+
+				Dispatcher.Invoke(DispatcherPriority.SystemIdle, (Action)(() =>
+				{
+					// Text box Updates
+					ConsoleExecutionLog.AppendText(((ActivityStateRecord)e.Record).State + Environment.NewLine);
+					ConsoleExecutionLog.AppendText($"******************{Environment.NewLine}");
+				}));
+			}
 		}
 
 		private void ConsoleExecutionLog_TextChanged(object sender, TextChangedEventArgs e)
@@ -177,15 +170,12 @@ namespace RehostedWorkflowDesigner.Views
 		/// <summary>
 		/// Retrieve Workflow Execution Logs and Workflow Execution Outputs
 		/// </summary>
-		private void WfExecutionCompleted(WorkflowApplicationCompletedEventArgs ev)
+		private void WfExecutionCompleted(WorkflowApplicationCompletedEventArgs e)
 		{
 			try
 			{
-				// retrieve & display execution log
-				_timer.Stop();
-
 				// retrieve & display execution output
-				foreach (var item in ev.Outputs)
+				foreach (var item in e.Outputs)
 				{
 					ConsoleOutput.Dispatcher.Invoke(
 						DispatcherPriority.Normal,
@@ -210,7 +200,7 @@ namespace RehostedWorkflowDesigner.Views
 		/// </summary>
 		private void CmdWorkflowRun(object sender, ExecutedRoutedEventArgs e)
 		{
-			//get workflow source from designer
+			// get workflow source from designer
 			CustomWfDesigner.Instance.Flush();
 			MemoryStream workflowStream = new MemoryStream(Encoding.Default.GetBytes(CustomWfDesigner.Instance.Text));
 
@@ -230,9 +220,6 @@ namespace RehostedWorkflowDesigner.Views
 
 			// execute 
 			_wfApp.Run();
-
-			// enable timer for real-time logging
-			_timer.Start();
 		}
 
 		/// <summary>
@@ -241,11 +228,7 @@ namespace RehostedWorkflowDesigner.Views
 		private void CmdWorkflowStop(object sender, ExecutedRoutedEventArgs e)
 		{
 			// manual stop
-			if (_wfApp != null)
-			{
-				_wfApp.Abort("Stopped by User");
-				_timer.Stop();
-			}
+			_wfApp?.Abort("Stopped by User");
 		}
 
 		/// <summary>
@@ -253,12 +236,9 @@ namespace RehostedWorkflowDesigner.Views
 		/// </summary>
 		private void CmdWorkflowSave(object sender, ExecutedRoutedEventArgs e)
 		{
-			if (_currentWorkflowFile == String.Empty)
+			if (_currentWorkflowFile == string.Empty)
 			{
-				var dialogSave = new SaveFileDialog();
-				dialogSave.Title = "Save Workflow";
-				dialogSave.Filter = "Workflows (.xaml)|*.xaml";
-
+				var dialogSave = new SaveFileDialog {Title = "Save Workflow", Filter = "Workflows (.xaml)|*.xaml"};
 				if (dialogSave.ShowDialog() == true)
 				{
 					CustomWfDesigner.Instance.Save(dialogSave.FileName);
@@ -276,7 +256,7 @@ namespace RehostedWorkflowDesigner.Views
 		/// </summary>
 		private void CmdWorkflowNew(object sender, ExecutedRoutedEventArgs e)
 		{
-			_currentWorkflowFile = String.Empty;
+			_currentWorkflowFile = string.Empty;
 			CustomWfDesigner.NewInstance();
 			WfDesignerBorder.Child = CustomWfDesigner.Instance.View;
 			WfPropertyBorder.Child = CustomWfDesigner.Instance.PropertyInspectorView;
@@ -287,7 +267,7 @@ namespace RehostedWorkflowDesigner.Views
 		/// </summary>
 		private void CmdWorkflowNewVB(object sender, ExecutedRoutedEventArgs e)
 		{
-			_currentWorkflowFile = String.Empty;
+			_currentWorkflowFile = string.Empty;
 			CustomWfDesigner.NewInstanceVB();
 			WfDesignerBorder.Child = CustomWfDesigner.Instance.View;
 			WfPropertyBorder.Child = CustomWfDesigner.Instance.PropertyInspectorView;
@@ -298,7 +278,7 @@ namespace RehostedWorkflowDesigner.Views
 		/// </summary>
 		private void CmdWorkflowNewCSharp(object sender, ExecutedRoutedEventArgs e)
 		{
-			_currentWorkflowFile = String.Empty;
+			_currentWorkflowFile = string.Empty;
 			CustomWfDesigner.NewInstanceCSharp();
 			WfDesignerBorder.Child = CustomWfDesigner.Instance.View;
 			WfPropertyBorder.Child = CustomWfDesigner.Instance.PropertyInspectorView;
@@ -309,9 +289,7 @@ namespace RehostedWorkflowDesigner.Views
 		/// </summary>
 		private void CmdWorkflowOpen(object sender, ExecutedRoutedEventArgs e)
 		{
-			var dialogOpen = new OpenFileDialog();
-			dialogOpen.Title = "Open Workflow";
-			dialogOpen.Filter = "Workflows (.xaml)|*.xaml";
+			var dialogOpen = new OpenFileDialog {Title = "Open Workflow", Filter = "Workflows (.xaml)|*.xaml"};
 
 			if (dialogOpen.ShowDialog() == true)
 			{
