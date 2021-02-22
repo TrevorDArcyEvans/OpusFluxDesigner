@@ -11,6 +11,7 @@ namespace RehostedWorkflowDesigner.Helpers
 		public TimeSpan Timeout { get; set; }
 		public Activity Activity { get; set; }
 		public SourceLocation SourceLocation { get; set; }
+		public DateTime ReceivedUtc { get; } = DateTime.UtcNow;
 
 		public TrackingRecordInfo(
 			TrackingRecord trackingRecord,
@@ -26,7 +27,7 @@ namespace RehostedWorkflowDesigner.Helpers
 
 		public override string ToString()
 		{
-			return Activity.DisplayName + " " + ((ActivityStateRecord)Record).State;
+			return $"[{ReceivedUtc:s}] [{Activity.DisplayName}] [{((ActivityStateRecord)Record).State}]";
 		}
 	}
 }
