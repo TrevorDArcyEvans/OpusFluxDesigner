@@ -70,6 +70,7 @@ The solution contains:
 * [Windows Workflow Foundation](http://msdn.microsoft.com/en-us/library/dd489441(v=vs.110).aspx)
 * [What's new in WF 4.5](https://msdn.microsoft.com/en-us/library/hh305677.aspx)
 * [Support for New Workflow Foundation 4.5 Features in the Rehosted Workflow Designer](https://github.com/dotnet/docs/blob/master/docs/framework/windows-workflow-foundation/wf-features-in-the-rehosted-workflow-designer.md)
+* [Using the ModelItem Editing Context](https://docs.microsoft.com/en-us/dotnet/framework/windows-workflow-foundation/using-the-modelitem-editing-context)
 * [Building C# expressions support and IntelliSense in the rehosted workflow designer](https://docs.microsoft.com/en-gb/archive/blogs/workflowteam/building-c-expressions-support-and-intellisense-in-the-rehosted-workflow-designer)
 * [Roslyn C# Expression Editor](https://github.com/dmetzgar/wf-rehost-roslyn)
 * [Custom Expression Editor](https://blogs.msdn.microsoft.com/cathyk/2009/11/05/implementing-a-custom-expression-editor/)
