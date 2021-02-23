@@ -201,8 +201,7 @@ namespace RehostedWorkflowDesigner.Views
 										 && activityType.IsPublic
 										 && !activityType.IsNested
 										 && !activityType.IsAbstract
-										 && (activityType.GetConstructor(Type.EmptyTypes) != null)
-										 && !activityType.Name.Contains('`') //optional, for extra cleanup
+										 && activityType.GetConstructor(Type.EmptyTypes) != null
 									 orderby
 										 activityType.Name
 									 select
