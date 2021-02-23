@@ -21,6 +21,8 @@ using RehostedWorkflowDesigner.Helpers;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Threading;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace RehostedWorkflowDesigner.Views
 {
@@ -153,17 +155,17 @@ namespace RehostedWorkflowDesigner.Views
 		{
 			try
 			{
-				// load System Activity Libraries into current domain; uncomment more if libraries below available on your system
-				AppDomain.CurrentDomain.Load("System.Activities");
-				AppDomain.CurrentDomain.Load("System.ServiceModel.Activities");
-				AppDomain.CurrentDomain.Load("System.Activities.Core.Presentation");
-				AppDomain.CurrentDomain.Load("Microsoft.Activities.Extensions");
-				AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Utility.Activities");
-				AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Security.Activities");
-				AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Management.Activities");
-				AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Diagnostics.Activities");
-				AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Core.Activities");
-				AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Activities");
+				var exeLoc = Assembly.GetExecutingAssembly().Location;
+				var exeDir = Path.GetDirectoryName(exeLoc);
+				var assyFilePath = Path.Combine(exeDir, "Activities.json");
+				var jobj = JObject.Parse(File.ReadAllText(assyFilePath));
+				var jarr = jobj["Activities"].Value<JArray>();
+				var assyNames = jarr.ToObject<List<string>>();
+
+				foreach (var assyName in assyNames)
+				{
+					AppDomain.CurrentDomain.Load(assyName);
+				}
 
 				// get all loaded assemblies
 				IEnumerable<Assembly> appAssemblies = AppDomain

@@ -1,0 +1,14 @@
+{
+  "Activities": [
+    "System.Activities",
+    "System.ServiceModel.Activities",
+    "System.Activities.Core.Presentation",
+    "Microsoft.Activities.Extensions",
+    "Microsoft.PowerShell.Utility.Activities",
+    "Microsoft.PowerShell.Security.Activities",
+    "Microsoft.PowerShell.Management.Activities",
+    "Microsoft.PowerShell.Diagnostics.Activities",
+    "Microsoft.PowerShell.Core.Activities",
+    "Microsoft.PowerShell.Activities"
+  ]
+}
