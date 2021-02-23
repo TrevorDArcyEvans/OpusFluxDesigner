@@ -16,6 +16,8 @@ The solution contains:
   * retrieve real-time Execution Log (TrackData) and Execution/Console Output(s)
   * highlights currently executing Activity
   * selecting item in Execution Log highlights corresponding Activity
+  * Workflow validation errors
+  * selecting item in Validation Errors selects corresponding Activity
 * Workflow Management
   * New / Open / Save / Run / Stop / Debug
   * toggle breakpoint on any Activity
@@ -58,6 +60,9 @@ The solution contains:
 ## Links
 
 ### Andrei Robert Oros
+
+<details>
+
 * [Windows Workflow Foundation and .Net Core](https://andreioros.com/blog/windows-workflow-foundation-net-core/)
 * [Windows Workflow Foundation in 2017 (overview)](https://andreioros.com/blog/windows-workflow-foundation-2017/)
 * blog post about the WF Designer demo - [Windows Workflow Foundation Rehosted Designer](http://andreioros.com/blog/windows-workflow-foundation-rehosted-designer/)
@@ -65,7 +70,12 @@ The solution contains:
 * project showcased at [Microsoft Summit 2015](http://andreioros.com/blog/workflow-foundation-microsoft-summit/#more-92) & [Timisoara .NET Meetup 2](http://www.meetup.com/Timisoara-NET-Meetup/events/186254642/)
 * Twitter [@orosandrei](http://twitter.com/orosandrei)
 
+</details>
+
 ### MSDN
+
+<details>
+
 * [Kushal Shah](https://docs.microsoft.com/en-us/archive/blogs/kushals/)
 * [Windows Workflow Foundation](http://msdn.microsoft.com/en-us/library/dd489441(v=vs.110).aspx)
 * [What's new in WF 4.5](https://msdn.microsoft.com/en-us/library/hh305677.aspx)
@@ -77,7 +87,12 @@ The solution contains:
 * [Expression Editing Mechanics](https://blogs.msdn.microsoft.com/cathyk/2009/11/09/expression-editing-mechanics/)
 * [Core Workflow (.net core runtime)](https://github.com/UiPath/corewf)
 
+</details>
+
 ### Other
+
+<details>
+
 * [Avalon Edit](https://github.com/icsharpcode/AvalonEdit)
 * [How to add the right-click breakpoints menu to a rehosted workflow designer
 ](https://stackoverflow.com/questions/25363874/how-to-add-the-right-click-breakpoints-menu-to-a-rehosted-workflow-designer)
@@ -93,6 +108,13 @@ The solution contains:
 * [WF4 Designer Rehosting: get Scoped Variables
 ](https://adrianot75.wordpress.com/2010/11/23/wf4-designer-rehosting-get-scoped-variables/)
 
+</details>
+
 ## Miscellaneous
+
+<details>
+
 * [Workflow icon](https://www.visualpharm.com/free-icons/workflow-595b40b85ba036ed117dc5ff)
 
+
+</details>
