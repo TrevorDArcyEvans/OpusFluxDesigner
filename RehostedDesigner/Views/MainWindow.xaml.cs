@@ -21,7 +21,6 @@ using RehostedWorkflowDesigner.Helpers;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Threading;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace RehostedWorkflowDesigner.Views
