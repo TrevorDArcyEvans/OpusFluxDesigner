@@ -158,14 +158,12 @@ namespace RehostedWorkflowDesigner.Views
 				AppDomain.CurrentDomain.Load("System.ServiceModel.Activities");
 				AppDomain.CurrentDomain.Load("System.Activities.Core.Presentation");
 				AppDomain.CurrentDomain.Load("Microsoft.Activities.Extensions");
-
-				// https://www.nuget.org/packages/Microsoft.PowerShell.5.ReferenceAssemblies/
-				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Utility.Activities");
-				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Security.Activities");
-				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Management.Activities");
-				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Diagnostics.Activities");
-				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Core.Activities");
-				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Activities");
+				AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Utility.Activities");
+				AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Security.Activities");
+				AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Management.Activities");
+				AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Diagnostics.Activities");
+				AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Core.Activities");
+				AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Activities");
 
 				// get all loaded assemblies
 				IEnumerable<Assembly> appAssemblies = AppDomain
