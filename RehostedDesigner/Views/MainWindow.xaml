@@ -73,7 +73,7 @@
             HorizontalAlignment="Left" 
             Width="329" 
             ItemsSource="{Binding TrackingRecordInfos}"
-            SelectionChanged="ConsoleExecutionLog_SelectionChanged"  />
+            SelectionChanged="ConsoleExecutionLog_SelectionChanged" />
 
         <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" Height="34" Content="Output" Margin="348,10,0,0" FontWeight="Bold" />
         <TextBox 
@@ -95,7 +95,8 @@
             FontFamily="Consolas"
             Margin="3,40,0,0" 
             HorizontalAlignment="Stretch"
-            DisplayMemberPath="Message"/>
+            DisplayMemberPath="Message"
+            SelectionChanged="WorkflowErrors_SelectionChanged"/>
 
         <StatusBar Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="21" Background="Gray">
             <StatusBarItem x:Name="LabelStatusBar" Foreground="White" FontSize="12" />

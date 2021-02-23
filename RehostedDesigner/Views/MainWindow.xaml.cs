@@ -8,6 +8,7 @@ using System.Activities;
 using System.Activities.Debugger;
 using System.Activities.Presentation;
 using System.Activities.Presentation.Debug;
+using System.Activities.Presentation.Model;
 using System.Activities.Presentation.Services;
 using System.Activities.Presentation.Toolbox;
 using System.Activities.Presentation.Validation;
@@ -150,6 +151,21 @@ namespace RehostedWorkflowDesigner.Views
 					_wfDesigner.DebugManagerView.CurrentLocation = new SourceLocation(_currentWorkflowFile, 1, 1, 1, 10);
 				}
 			}));
+		}
+
+		private void WorkflowErrors_SelectionChanged(object sender, RoutedEventArgs e)
+		{
+			var vei = (ValidationErrorInfo)WorkflowErrors.SelectedItem;
+			if (vei is null)
+			{
+				return;
+			}
+
+			var modelSvc = _wfDesigner.Context.Services.GetService<ModelService>();
+			var allModels = modelSvc.Find(modelSvc.Root, typeof(Activity));
+			var errorModel = allModels.Single(mi => (mi.GetCurrentValue() as Activity)?.Id == vei.Id);
+			Selection.SelectOnly(_wfDesigner.Context, errorModel);
+			ModelItemExtensions.Focus(errorModel);
 		}
 
 		private void InitializeActivitiesToolbox()
