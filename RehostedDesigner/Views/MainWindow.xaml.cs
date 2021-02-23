@@ -174,7 +174,6 @@ namespace RehostedWorkflowDesigner.Views
 					.OrderBy(a => a.GetName().Name);
 
 				// check if assemblies contain activities
-				var activitiesCount = 0;
 				foreach (var activityLibrary in appAssemblies)
 				{
 					var wfToolboxCategory = new ToolboxCategory(activityLibrary.GetName().Name);
@@ -214,7 +213,6 @@ namespace RehostedWorkflowDesigner.Views
 					if (wfToolboxCategory.Tools.Count > 0)
 					{
 						_wfToolbox.Categories.Add(wfToolboxCategory);
-						activitiesCount += wfToolboxCategory.Tools.Count;
 					}
 				}
 
@@ -231,6 +229,7 @@ namespace RehostedWorkflowDesigner.Views
 					   }
 				);
 
+				var activitiesCount = _wfToolbox.Categories.Sum(toolboxCategory => toolboxCategory.Tools.Count);
 				LabelStatusBar.Content = $"Loaded Activities: {activitiesCount}";
 				WfToolboxBorder.Child = _wfToolbox;
 			}
