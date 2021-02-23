@@ -31,10 +31,11 @@
             <RowDefinition Height="133" />
             <RowDefinition Height="4*" />
             <RowDefinition />
+            <RowDefinition />
             <RowDefinition Height="21"/>
         </Grid.RowDefinitions>
 
-        <Ribbon Grid.ColumnSpan="3">
+        <Ribbon Grid.Row="0" Grid.ColumnSpan="3">
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu>
                     <RibbonApplicationMenuItem Header="Exit" ImageSource="/Rehosted WF Designer;component/Resources/Menu/exit.png" Command="ApplicationCommands.Close" />
@@ -58,37 +59,50 @@
             </RibbonTab>
         </Ribbon>
 
-        <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeDirection="Columns" Margin="0" Padding="0" Background = "Gray" Width = "2" />
-        <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeDirection="Columns" Margin="0" Padding="0" Background = "Gray" Width = "2" />
+        <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeDirection="Columns" Margin="0" Padding="0" Background = "Gray" Width = "2" />
+        <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeDirection="Columns" Margin="0" Padding="0" Background = "Gray" Width = "2" />
 
-        <StatusBar HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="3" Height="21" Grid.ColumnSpan="3" Background="Gray">
-            <StatusBarItem x:Name="LabelStatusBar" Foreground="White" FontSize="12">
-            </StatusBarItem>
-        </StatusBar>
+        <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Height="34" Content="Execution Log" Margin="3,10,0,0" FontWeight="Bold" />
         <ListView 
             x:Name="ConsoleExecutionLog" 
             ScrollViewer.VerticalScrollBarVisibility="Auto" 
-            Grid.Column="1" 
             Grid.Row="2" 
+            Grid.Column="1" 
             FontFamily="Consolas"
             Margin="3,40,0,0" 
             HorizontalAlignment="Left" 
             Width="329" 
             ItemsSource="{Binding TrackingRecordInfos}"
             SelectionChanged="ConsoleExecutionLog_SelectionChanged"  />
+
+        <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" Height="34" Content="Output" Margin="348,10,0,0" FontWeight="Bold" />
         <TextBox 
             x:Name="ConsoleOutput" 
             ScrollViewer.VerticalScrollBarVisibility="Auto" 
-            Grid.Column="1" 
             Grid.Row="2" 
+            Grid.Column="1" 
             FontFamily="Consolas"
             IsReadOnly="True" 
             Margin="348,40,3,0" />
-        <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Height="34" Content="Execution Log" Margin="3,15,0,0" FontWeight="Bold" />
-        <Label Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" Height="34" Content="Output" Margin="348,15,0,0" FontWeight="Bold" />
 
-        <Border Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Name="WfToolboxBorder"/>
-        <Border Grid.Column="1" Grid.Row="1" Name="WfDesignerBorder" Padding="3"/>
-        <Border Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Name="WfPropertyBorder"/>
+        <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Height="34" Content="Validation Errors" Margin="3,10,0,0" FontWeight="Bold" />
+        <ListView 
+            x:Name="WorkflowErrors" 
+            ScrollViewer.VerticalScrollBarVisibility="Auto" 
+            Grid.Row="3" 
+            Grid.Column="1" 
+            Grid.ColumnSpan="2" 
+            FontFamily="Consolas"
+            Margin="3,40,0,0" 
+            HorizontalAlignment="Stretch"
+            DisplayMemberPath="Message"/>
+
+        <StatusBar Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="21" Background="Gray">
+            <StatusBarItem x:Name="LabelStatusBar" Foreground="White" FontSize="12" />
+        </StatusBar>
+
+        <Border Grid.Row="1" Grid.Column="0" Grid.RowSpan="3" Name="WfToolboxBorder"/>
+        <Border Grid.Row="1" Grid.Column="1" Name="WfDesignerBorder" Padding="3"/>
+        <Border Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" Name="WfPropertyBorder"/>
     </Grid>
 </Window>

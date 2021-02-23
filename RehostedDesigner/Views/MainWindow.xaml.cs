@@ -10,8 +10,10 @@ using System.Activities.Presentation;
 using System.Activities.Presentation.Debug;
 using System.Activities.Presentation.Services;
 using System.Activities.Presentation.Toolbox;
+using System.Activities.Presentation.Validation;
 using System.Activities.Presentation.View;
 using System.Activities.Tracking;
+using System.Activities.Validation;
 using System.Reflection;
 using System.IO;
 using System.Activities.XamlIntegration;
@@ -238,7 +240,7 @@ namespace RehostedWorkflowDesigner.Views
 			}
 		}
 
-		private void WfExecutionCompleted(WorkflowApplicationCompletedEventArgs e)
+		private void WfExecutionFinished()
 		{
 			_resumeRuntimeFromHost = null;
 
@@ -291,15 +293,16 @@ namespace RehostedWorkflowDesigner.Views
 
 		private Dictionary<object, SourceLocation> UpdateSourceLocationMappingInDebuggerService()
 		{
-			var rootInstance = GetRootInstance();
 			var sourceLocationMapping = new Dictionary<object, SourceLocation>();
+			var rootInstance = GetRootInstance();
+			var runtimeRootElement = GetRootRuntimeWorkflowElement();
 
-			if (rootInstance != null)
+			if (rootInstance != null &&
+				runtimeRootElement != null)
 			{
 				var documentRootElement = GetRootWorkflowElement(rootInstance);
-
 				SourceLocationProvider.CollectMapping(
-					GetRootRuntimeWorkflowElement(),
+					runtimeRootElement,
 					documentRootElement,
 					sourceLocationMapping,
 					_wfDesigner.Context.Items.GetValue<WorkflowFileItem>().LoadedFile);
@@ -359,13 +362,17 @@ namespace RehostedWorkflowDesigner.Views
 				CompileExpressions = true
 			};
 
-			var root = ActivityXamlServices.Load(workflowStream, settings);
-			WorkflowInspectionServices.CacheMetadata(root);
+			var enclosingAct = ActivityXamlServices.Load(workflowStream, settings);
+			if (ActivityValidationServices.Validate(enclosingAct).Errors.Any())
+			{
+				return null;
+			}
+			WorkflowInspectionServices.CacheMetadata(enclosingAct);
 
-			var enumerator1 = WorkflowInspectionServices.GetActivities(root).GetEnumerator();
+			var enumerator1 = WorkflowInspectionServices.GetActivities(enclosingAct).GetEnumerator();
 			// Get the first child of the x:class
 			enumerator1.MoveNext();
-			root = enumerator1.Current;
+			var root = enumerator1.Current;
 
 			return root;
 		}
@@ -412,12 +419,17 @@ namespace RehostedWorkflowDesigner.Views
 				};
 
 				var activityExecute = ActivityXamlServices.Load(workflowStream, settings) as DynamicActivity;
+				if (ActivityValidationServices.Validate(activityExecute).Errors.Any())
+				{
+					WfExecutionFinished();
+					return;
+				}
 
 				// configure workflow application
 				_wfApp = new WorkflowApplication(activityExecute);
 				_wfApp.Extensions.Add(_executionLog);
-				_wfApp.Completed = WfExecutionCompleted;
-				// TODO   support _wfApp.Aborted
+				_wfApp.Completed = ev => WfExecutionFinished();
+				_wfApp.Aborted = ev => WfExecutionFinished();
 
 				// execute 
 				ThreadPool.QueueUserWorkItem(context =>
@@ -503,6 +515,9 @@ namespace RehostedWorkflowDesigner.Views
 
 			_wfDesigner.ModelChanged += WorkflowDesigner_OnModelChanged;
 
+			var validationErrorService = new ValidationErrorService(WorkflowErrors.Items);
+			_wfDesigner.Context.Services.Publish<IValidationErrorService>(validationErrorService);
+
 			ResetUI();
 			RegenerateSourceDebuggerMappings();
 		}
@@ -511,6 +526,11 @@ namespace RehostedWorkflowDesigner.Views
 		{
 			var mi = _wfDesigner.Context.Items.GetValue<Selection>().PrimarySelection;
 			if (!(mi?.GetCurrentValue() is Activity activity))
+			{
+				return;
+			}
+
+			if (!_designerSourceLocationMapping.ContainsKey(activity))
 			{
 				return;
 			}
