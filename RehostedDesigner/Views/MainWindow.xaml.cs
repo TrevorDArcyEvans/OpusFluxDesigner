@@ -157,16 +157,9 @@ namespace RehostedWorkflowDesigner.Views
 				AppDomain.CurrentDomain.Load("System.Activities");
 				AppDomain.CurrentDomain.Load("System.ServiceModel.Activities");
 				AppDomain.CurrentDomain.Load("System.Activities.Core.Presentation");
+				AppDomain.CurrentDomain.Load("Microsoft.Activities.Extensions");
 
-        // Microsoft.Workflow.Client.dll?
-				//AppDomain.CurrentDomain.Load("Microsoft.Workflow.Management");
-
-        // https://www.nuget.org/packages/Microsoft.Activities.Extensions/
-				//AppDomain.CurrentDomain.Load("Microsoft.Activities.Extensions");
-				//AppDomain.CurrentDomain.Load("Microsoft.Activities");
-				//AppDomain.CurrentDomain.Load("Microsoft.Activities.Hosting");
-
-        // https://www.nuget.org/packages/Microsoft.PowerShell.5.ReferenceAssemblies/
+				// https://www.nuget.org/packages/Microsoft.PowerShell.5.ReferenceAssemblies/
 				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Utility.Activities");
 				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Security.Activities");
 				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Management.Activities");
@@ -175,7 +168,10 @@ namespace RehostedWorkflowDesigner.Views
 				//AppDomain.CurrentDomain.Load("Microsoft.PowerShell.Activities");
 
 				// get all loaded assemblies
-				IEnumerable<Assembly> appAssemblies = AppDomain.CurrentDomain.GetAssemblies().OrderBy(a => a.GetName().Name);
+				IEnumerable<Assembly> appAssemblies = AppDomain
+					.CurrentDomain
+					.GetAssemblies()
+					.OrderBy(a => a.GetName().Name);
 
 				// check if assemblies contain activities
 				var activitiesCount = 0;
@@ -236,7 +232,7 @@ namespace RehostedWorkflowDesigner.Views
 					   }
 				);
 
-				LabelStatusBar.Content = $"Loaded Activities: {activitiesCount.ToString()}";
+				LabelStatusBar.Content = $"Loaded Activities: {activitiesCount}";
 				WfToolboxBorder.Child = _wfToolbox;
 			}
 			catch (Exception ex)
@@ -424,7 +420,7 @@ namespace RehostedWorkflowDesigner.Views
 				_wfApp = new WorkflowApplication(activityExecute);
 				_wfApp.Extensions.Add(_executionLog);
 				_wfApp.Completed = WfExecutionCompleted;
-        // TODO   support _wfApp.Aborted
+				// TODO   support _wfApp.Aborted
 
 				// execute 
 				ThreadPool.QueueUserWorkItem(context =>
