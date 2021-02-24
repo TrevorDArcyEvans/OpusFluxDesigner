@@ -61,6 +61,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gat.Controls.AboutBox, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AboutBox.2.0.0\lib\net451\Gat.Controls.AboutBox.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <HintPath>..\packages\AvalonEdit.5.0.3\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
       <Private>True</Private>
@@ -361,6 +364,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Menu\breakpoint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Menu\The-Noun-Project-1876966-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ApplicationLogo.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\GitHub-Mark.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

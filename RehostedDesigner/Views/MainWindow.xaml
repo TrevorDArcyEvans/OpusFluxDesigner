@@ -9,6 +9,7 @@
         <CommandBinding Command="ApplicationCommands.New" Executed="CmdWorkflowNew"/>
         <CommandBinding Command="ApplicationCommands.Open" Executed="CmdWorkflowOpen"/>
         <CommandBinding Command="ApplicationCommands.Save" Executed="CmdWorkflowSave"/>
+        <CommandBinding Command="ApplicationCommands.Help" Executed="CmdAbout"/>
         <CommandBinding Command="mw:CustomCommands.CmdWfNewCSharp" Executed="CmdWorkflowNewCSharp" />
         <CommandBinding Command="mw:CustomCommands.CmdWfNewVB" Executed="CmdWorkflowNewVB" />
         <CommandBinding Command="mw:CustomCommands.CmdWfRun" Executed="CmdWorkflowRun" />
@@ -39,6 +40,7 @@
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu>
                     <RibbonApplicationMenuItem Header="Exit" ImageSource="/Rehosted WF Designer;component/Resources/Menu/exit.png" Command="ApplicationCommands.Close" />
+                    <RibbonApplicationMenuItem Header="About" ImageSource="/Rehosted WF Designer;component/Resources/Menu/The-Noun-Project-1876966-200.png" Command="ApplicationCommands.Help" />
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>
             <RibbonTab x:Name="WorkflowTab" Header="Workflow">

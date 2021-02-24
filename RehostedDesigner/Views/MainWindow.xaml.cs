@@ -23,7 +23,9 @@ using Microsoft.Win32;
 using RehostedWorkflowDesigner.Helpers;
 using System.Diagnostics;
 using System.Threading;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using Gat.Controls;
 using Newtonsoft.Json.Linq;
 
 namespace RehostedWorkflowDesigner.Views
@@ -414,6 +416,23 @@ namespace RehostedWorkflowDesigner.Views
 		private void CmdExit(object sender, ExecutedRoutedEventArgs e)
 		{
 			Application.Current.Shutdown();
+		}
+
+		private void CmdAbout(object sender, ExecutedRoutedEventArgs e)
+		{
+			var appLogo = new BitmapImage(new Uri(@"pack://application:,,,/Rehosted%20WF%20Designer;component/Resources/ApplicationLogo.bmp", UriKind.Absolute));
+			var pubLogo = new BitmapImage(new Uri(@"pack://application:,,,/Rehosted%20WF%20Designer;component/Resources/GitHub-Mark.png", UriKind.Absolute));
+			var about = new About
+			{
+				IsSemanticVersioning = true,
+				ApplicationLogo = appLogo,
+				PublisherLogo = pubLogo,
+				HyperlinkText = "https://github.com/TrevorDArcyEvans/Rehosted-Workflow-Designer",
+				AdditionalNotes = string.Empty
+			};
+
+			about.Show();
+
 		}
 
 		private void CmdWorkflowRun(object sender, ExecutedRoutedEventArgs e)
