@@ -70,41 +70,33 @@
         <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeDirection="Columns" Margin="0" Padding="0" Background = "Gray" Width = "2" />
         <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeDirection="Columns" Margin="0" Padding="0" Background = "Gray" Width = "2" />
 
-        <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Height="34" Content="Execution Log" Margin="3,10,0,0" FontWeight="Bold" />
-        <ListView 
-            x:Name="ConsoleExecutionLog" 
-            ScrollViewer.VerticalScrollBarVisibility="Auto" 
-            Grid.Row="2" 
-            Grid.Column="1" 
-            FontFamily="Consolas"
-            Margin="3,40,0,0" 
-            HorizontalAlignment="Left" 
-            Width="329" 
-            ItemsSource="{Binding TrackingRecordInfos}"
-            SelectionChanged="ConsoleExecutionLog_SelectionChanged" />
+        <TabControl Grid.Row="2" Grid.Column="1" Grid.RowSpan="2">
+            <TabItem Header="Execution Log">
+                <ListView 
+                    x:Name="ConsoleExecutionLog" 
+                    ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                    FontFamily="Consolas"
+                    ItemsSource="{Binding TrackingRecordInfos}"
+                    SelectionChanged="ConsoleExecutionLog_SelectionChanged" />
+            </TabItem>
 
-        <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" Height="34" Content="Output" Margin="348,10,0,0" FontWeight="Bold" />
-        <TextBox 
-            x:Name="ConsoleOutput" 
-            ScrollViewer.VerticalScrollBarVisibility="Auto" 
-            Grid.Row="2" 
-            Grid.Column="1" 
-            FontFamily="Consolas"
-            IsReadOnly="True" 
-            Margin="348,40,3,0" />
+            <TabItem Header="Output">
+                <TextBox 
+                    x:Name="ConsoleOutput" 
+                    ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                    FontFamily="Consolas"
+                    IsReadOnly="True" />
+            </TabItem>
 
-        <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Height="34" Content="Validation Errors" Margin="3,10,0,0" FontWeight="Bold" />
-        <ListView 
-            x:Name="WorkflowErrors" 
-            ScrollViewer.VerticalScrollBarVisibility="Auto" 
-            Grid.Row="3" 
-            Grid.Column="1" 
-            Grid.ColumnSpan="2" 
-            FontFamily="Consolas"
-            Margin="3,40,0,0" 
-            HorizontalAlignment="Stretch"
-            DisplayMemberPath="Message"
-            SelectionChanged="WorkflowErrors_SelectionChanged"/>
+            <TabItem Header="Validation Errors">
+                <ListView 
+                    x:Name="WorkflowErrors" 
+                    ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                    FontFamily="Consolas"
+                    DisplayMemberPath="Message"
+                    SelectionChanged="WorkflowErrors_SelectionChanged" />
+            </TabItem>
+        </TabControl>
 
         <StatusBar Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="21" Background="Gray">
             <StatusBarItem x:Name="LabelStatusBar" Foreground="White" FontSize="12" />
