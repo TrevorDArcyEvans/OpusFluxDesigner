@@ -45,17 +45,17 @@
                     <RibbonApplicationMenuItem Header="About" ImageSource="/Rehosted WF Designer;component/Resources/Menu/The-Noun-Project-1876966-200.png" Command="ApplicationCommands.Help" />
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>
-            <RibbonTab x:Name="WorkflowTab" Header="Workflow">
-                <RibbonGroup x:Name="GroupWorkflowFile" Header="File">
-                    <RibbonMenuButton x:Name="ButtonWorkflowNew" Label="New" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/new.png">
-                        <RibbonMenuItem x:Name="ButtonWorkflowNewVB" Command="ApplicationCommands.New" Header="Default (VB ExpressionEditor)"/>
-                        <RibbonMenuItem x:Name="ButtonWorkflowNewVbIntellisense" Command="mw:CustomCommands.CmdWfNewVB" Header="Custom (VB Intellisense ExpressionEditor)" IsEnabled="True"/>
-                        <RibbonMenuItem x:Name="ButtonWorkflowNewCSharp" Command="mw:CustomCommands.CmdWfNewCSharp" Header="Custom (C# ExpressionEditor)" IsEnabled="True"/>
+            <RibbonTab Header="Workflow">
+                <RibbonGroup Header="File">
+                    <RibbonMenuButton Label="New" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/new.png">
+                        <RibbonMenuItem Command="ApplicationCommands.New" Header="Default (VB ExpressionEditor)"/>
+                        <RibbonMenuItem Command="mw:CustomCommands.CmdWfNewVB" Header="Custom (VB Intellisense ExpressionEditor)" IsEnabled="True"/>
+                        <RibbonMenuItem Command="mw:CustomCommands.CmdWfNewCSharp" Header="Custom (C# ExpressionEditor)" IsEnabled="True"/>
                     </RibbonMenuButton>
-                    <RibbonButton x:Name="ButtonWorkflowOpen" Command="ApplicationCommands.Open" Label="Open" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/open.png" />
-                    <RibbonButton x:Name="ButtonWorkflowSave" Command="ApplicationCommands.Save" Label="Save"  LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/save.png" />
+                    <RibbonButton Command="ApplicationCommands.Open" Label="Open" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/open.png" />
+                    <RibbonButton Command="ApplicationCommands.Save" Label="Save"  LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/save.png" />
                 </RibbonGroup>
-                <RibbonGroup x:Name="GroupWorkflowRuntime" Header="Runtime">
+                <RibbonGroup Header="Runtime">
                     <RibbonButton Command="mw:CustomCommands.CmdWfRun" Label="Run" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/run.png" />
                     <RibbonButton Command="mw:CustomCommands.CmdWfStop" Label="Stop" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/stop.png" />
                     <RibbonButton Command="bp:BreakpointCommands.CmdToggleBreakpoint" Label="Toggle Breakpoint" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/breakpoint.png" />
