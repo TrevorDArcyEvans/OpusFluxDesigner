@@ -119,7 +119,7 @@ namespace OpusFluxDesigner.Views
 		{
 			Dispatcher.Invoke(DispatcherPriority.SystemIdle, (Action)(() =>
 			{
-				ConsoleOutput.Text += e.Value + Environment.NewLine;
+				ConsoleOutput.Text += $"[{DateTime.UtcNow:s}] {e.Value}{Environment.NewLine}";
 			}));
 		}
 
