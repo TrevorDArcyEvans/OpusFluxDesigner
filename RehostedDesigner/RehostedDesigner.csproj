@@ -294,6 +294,7 @@
     <Compile Include="Helpers\TrackingEventArgs.cs" />
     <Compile Include="Helpers\TrackingRecordInfo.cs" />
     <Compile Include="Helpers\ValidationErrorService.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="VbExpressionEditor\VbExpressionEditorInstance.cs" />
     <Compile Include="VbExpressionEditor\VbExpressionEditorService.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
