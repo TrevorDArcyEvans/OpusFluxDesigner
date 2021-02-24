@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 
-namespace RehostedWorkflowDesigner.CSharpExpressionEditor
+namespace OpusFluxDesigner.CSharpExpressionEditor
 {
     public class RoslynExpressionEditorService : IExpressionEditorService
     {

@@ -3,7 +3,7 @@ using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.VisualBasic;
-using RehostedWorkflowDesigner.Helpers;
+using OpusFluxDesigner.Helpers;
 using System;
 using System.Activities.Presentation.View;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace RehostedWorkflowDesigner.VbExpressionEditor
+namespace OpusFluxDesigner.VbExpressionEditor
 {
 	public class VbExpressionEditorInstance : TextEditor, IExpressionEditorInstance
 	{

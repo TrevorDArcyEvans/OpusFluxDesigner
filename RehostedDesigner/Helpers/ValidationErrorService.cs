@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace RehostedWorkflowDesigner.Helpers
+namespace OpusFluxDesigner.Helpers
 {
 	public sealed class ValidationErrorService : IValidationErrorService
 	{

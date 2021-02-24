@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 
-namespace RehostedWorkflowDesigner.CSharpExpressionEditor
+namespace OpusFluxDesigner.CSharpExpressionEditor
 {
     internal static class ExpressionHelper
     {

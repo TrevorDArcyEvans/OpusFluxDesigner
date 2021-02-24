@@ -2,7 +2,7 @@
 using System.Activities;
 using System.Activities.Tracking;
 
-namespace RehostedWorkflowDesigner.Helpers
+namespace OpusFluxDesigner.Helpers
 {
 	public sealed class TrackingEventArgs : EventArgs
 	{

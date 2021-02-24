@@ -1,9 +1,9 @@
-﻿<Window x:Class="RehostedWorkflowDesigner.Views.MainWindow"
+﻿<Window x:Class="OpusFluxDesigner.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mw="clr-namespace:RehostedWorkflowDesigner.Helpers"
-        xmlns:bp="clr-namespace:RehostedWorkflowDesigner.Helpers"
-        Title="Rehosted WF Designer Showcase">
+        xmlns:mw="clr-namespace:OpusFluxDesigner.Helpers"
+        xmlns:bp="clr-namespace:OpusFluxDesigner.Helpers"
+        Title="OpusFlux Designer">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Close" Executed="CmdExit"/>
         <CommandBinding Command="ApplicationCommands.New" Executed="CmdWorkflowNew"/>
@@ -41,28 +41,28 @@
         <Ribbon Grid.Row="0" Grid.ColumnSpan="3">
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu>
-                    <RibbonApplicationMenuItem Header="Exit" ImageSource="/Rehosted WF Designer;component/Resources/Menu/exit.png" Command="ApplicationCommands.Close" />
-                    <RibbonApplicationMenuItem Header="About" ImageSource="/Rehosted WF Designer;component/Resources/Menu/The-Noun-Project-1876966-200.png" Command="ApplicationCommands.Help" />
+                    <RibbonApplicationMenuItem Header="Exit" ImageSource="/OpusFluxDesigner;component/Resources/Menu/exit.png" Command="ApplicationCommands.Close" />
+                    <RibbonApplicationMenuItem Header="About" ImageSource="/OpusFluxDesigner;component/Resources/Menu/The-Noun-Project-1876966-200.png" Command="ApplicationCommands.Help" />
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>
             <RibbonTab Header="Workflow">
                 <RibbonGroup Header="File">
-                    <RibbonMenuButton Label="New" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/new.png">
+                    <RibbonMenuButton Label="New" LargeImageSource="/OpusFluxDesigner;component/Resources/Menu/new.png">
                         <RibbonMenuItem Command="ApplicationCommands.New" Header="Default (VB ExpressionEditor)"/>
                         <RibbonMenuItem Command="mw:CustomCommands.CmdWfNewVB" Header="Custom (VB Intellisense ExpressionEditor)" IsEnabled="True"/>
                         <RibbonMenuItem Command="mw:CustomCommands.CmdWfNewCSharp" Header="Custom (C# ExpressionEditor)" IsEnabled="True"/>
                     </RibbonMenuButton>
-                    <RibbonButton Command="ApplicationCommands.Open" Label="Open" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/open.png" />
-                    <RibbonButton Command="ApplicationCommands.Save" Label="Save"  LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/save.png" />
+                    <RibbonButton Command="ApplicationCommands.Open" Label="Open" LargeImageSource="/OpusFluxDesigner;component/Resources/Menu/open.png" />
+                    <RibbonButton Command="ApplicationCommands.Save" Label="Save"  LargeImageSource="/OpusFluxDesigner;component/Resources/Menu/save.png" />
                 </RibbonGroup>
                 <RibbonGroup Header="Runtime">
-                    <RibbonButton Command="mw:CustomCommands.CmdWfRun" Label="Run" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/run.png" />
-                    <RibbonButton Command="mw:CustomCommands.CmdWfStop" Label="Stop" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/stop.png" />
-                    <RibbonButton Command="bp:BreakpointCommands.CmdToggleBreakpoint" Label="Toggle Breakpoint" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/breakpoint.png" />
+                    <RibbonButton Command="mw:CustomCommands.CmdWfRun" Label="Run" LargeImageSource="/OpusFluxDesigner;component/Resources/Menu/run.png" />
+                    <RibbonButton Command="mw:CustomCommands.CmdWfStop" Label="Stop" LargeImageSource="/OpusFluxDesigner;component/Resources/Menu/stop.png" />
+                    <RibbonButton Command="bp:BreakpointCommands.CmdToggleBreakpoint" Label="Toggle Breakpoint" LargeImageSource="/OpusFluxDesigner;component/Resources/Menu/breakpoint.png" />
                 </RibbonGroup>
                 <RibbonGroup Header="Edit">
-                    <RibbonButton Command="ApplicationCommands.Undo" Label="Undo" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/The-Noun-Project-120354-200.png" />
-                    <RibbonButton Command="ApplicationCommands.Redo" Label="Redo" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/The-Noun-Project-120350-200.png" />
+                    <RibbonButton Command="ApplicationCommands.Undo" Label="Undo" LargeImageSource="/OpusFluxDesigner;component/Resources/Menu/The-Noun-Project-120354-200.png" />
+                    <RibbonButton Command="ApplicationCommands.Redo" Label="Redo" LargeImageSource="/OpusFluxDesigner;component/Resources/Menu/The-Noun-Project-120350-200.png" />
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>

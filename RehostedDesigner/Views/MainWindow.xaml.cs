@@ -21,7 +21,7 @@ using System.Activities.XamlIntegration;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Microsoft.Win32;
-using RehostedWorkflowDesigner.Helpers;
+using OpusFluxDesigner.Helpers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -29,9 +29,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Gat.Controls;
 using Newtonsoft.Json.Linq;
-using RehostedWorkflowDesigner.Annotations;
+using OpusFluxDesigner.Annotations;
 
-namespace RehostedWorkflowDesigner.Views
+namespace OpusFluxDesigner.Views
 {
 	public sealed partial class MainWindow : INotifyPropertyChanged
 	{
@@ -446,8 +446,8 @@ namespace RehostedWorkflowDesigner.Views
 
 		private void CmdAbout(object sender, ExecutedRoutedEventArgs e)
 		{
-			var appLogo = new BitmapImage(new Uri(@"pack://application:,,,/Rehosted%20WF%20Designer;component/Resources/ApplicationLogo.bmp", UriKind.Absolute));
-			var pubLogo = new BitmapImage(new Uri(@"pack://application:,,,/Rehosted%20WF%20Designer;component/Resources/GitHub-Mark.png", UriKind.Absolute));
+			var appLogo = new BitmapImage(new Uri(@"pack://application:,,,/OpusFluxDesigner;component/Resources/ApplicationLogo.bmp", UriKind.Absolute));
+			var pubLogo = new BitmapImage(new Uri(@"pack://application:,,,/OpusFluxDesigner;component/Resources/GitHub-Mark.png", UriKind.Absolute));
 			var about = new About
 			{
 				IsSemanticVersioning = true,

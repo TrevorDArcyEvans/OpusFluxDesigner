@@ -4,7 +4,7 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using RehostedWorkflowDesigner.Helpers;
+using OpusFluxDesigner.Helpers;
 using System;
 using System.Activities.Presentation.Model;
 using System.Activities.Presentation.View;
@@ -14,7 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace RehostedWorkflowDesigner.CSharpExpressionEditor
+namespace OpusFluxDesigner.CSharpExpressionEditor
 {
     public class RoslynExpressionEditorInstance : TextEditor, IExpressionEditorInstance
     {

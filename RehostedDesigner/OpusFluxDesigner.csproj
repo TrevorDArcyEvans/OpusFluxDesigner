@@ -7,8 +7,8 @@
     <ProjectGuid>{CF40BB63-4741-41F1-9461-FA9A7319AB6C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RehostedWorkflowDesigner</RootNamespace>
-    <AssemblyName>Rehosted WF Designer</AssemblyName>
+    <RootNamespace>OpusFluxDesigner</RootNamespace>
+    <AssemblyName>OpusFluxDesigner</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>RehostedWorkflowDesigner.App</StartupObject>
+    <StartupObject>OpusFluxDesigner.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\icon_app.ico</ApplicationIcon>

@@ -1,4 +1,4 @@
-﻿namespace RehostedWorkflowDesigner.CSharpExpressionEditor
+﻿namespace OpusFluxDesigner.CSharpExpressionEditor
 {
     using System;
     using System.Collections;

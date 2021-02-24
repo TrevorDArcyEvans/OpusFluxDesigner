@@ -4,7 +4,7 @@ using System.Activities.Presentation.Hosting;
 using System.Activities.Presentation.Model;
 using System.Collections.Generic;
 
-namespace RehostedWorkflowDesigner.CSharpExpressionEditor
+namespace OpusFluxDesigner.CSharpExpressionEditor
 {
     public class ExpressionValidationContext
     {

@@ -2,7 +2,7 @@
 using System.Activities.Presentation;
 using System.Activities.Presentation.Model;
 
-namespace RehostedWorkflowDesigner.CSharpExpressionEditor
+namespace OpusFluxDesigner.CSharpExpressionEditor
 {
     internal class ExpressionSelection : ContextItem
     {

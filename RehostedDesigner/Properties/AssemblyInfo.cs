@@ -5,13 +5,13 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Rehosted WF Designer")]
-[assembly: AssemblyDescription("Rehosted WF Designer")]
+[assembly: AssemblyTitle("OpusFlux Designer")]
+[assembly: AssemblyDescription("OpusFlux Designer")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Andrei Oros + Trevor D'Arcy-Evans")]
-[assembly: AssemblyProduct("Rehosted WF Designer")]
+[assembly: AssemblyProduct("OpusFlux Designer")]
 [assembly: AssemblyCopyright("Copyright © Andrei Oros 2014 / Copyright © Trevor D'Arcy-Evans 2021")]
-[assembly: AssemblyTrademark("Rehosted WF Designer")]
+[assembly: AssemblyTrademark("OpusFlux Designer")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

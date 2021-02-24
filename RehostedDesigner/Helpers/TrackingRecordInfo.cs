@@ -3,7 +3,7 @@ using System.Activities;
 using System.Activities.Debugger;
 using System.Activities.Tracking;
 
-namespace RehostedWorkflowDesigner.Helpers
+namespace OpusFluxDesigner.Helpers
 {
 	public sealed class TrackingRecordInfo
 	{

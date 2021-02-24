@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace RehostedWorkflowDesigner.Helpers
+namespace OpusFluxDesigner.Helpers
 {
 	public static class BreakpointCommands
 	{

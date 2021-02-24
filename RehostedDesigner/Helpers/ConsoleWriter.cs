@@ -1,4 +1,4 @@
-﻿namespace RehostedWorkflowDesigner.Helpers
+﻿namespace OpusFluxDesigner.Helpers
 {
 	using System;
 	using System.IO;

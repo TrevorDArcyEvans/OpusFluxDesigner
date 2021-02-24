@@ -1,12 +1,12 @@
 ﻿using Microsoft.CSharp.Activities;
-using RehostedWorkflowDesigner.CSharpExpressionEditor;
-using RehostedWorkflowDesigner.VbExpressionEditor;
+using OpusFluxDesigner.CSharpExpressionEditor;
+using OpusFluxDesigner.VbExpressionEditor;
 using System;
 using System.Activities.Core.Presentation;
 using System.Activities.Presentation;
 using System.Activities.Presentation.View;
 
-namespace RehostedWorkflowDesigner.Helpers
+namespace OpusFluxDesigner.Helpers
 {
 	/// <summary>
 	/// Workflow Designer Wrapper

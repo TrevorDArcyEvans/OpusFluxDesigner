@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Windows.Markup;
 using System.Xaml;
 
-namespace RehostedWorkflowDesigner.CSharpExpressionEditor
+namespace OpusFluxDesigner.CSharpExpressionEditor
 {
     class ParserContext : LocationReferenceEnvironment, IValueSerializerContext, IXamlNameResolver, INamespacePrefixLookup, IXamlNamespaceResolver
     {

@@ -4,7 +4,7 @@ using System.Activities.Presentation.Model;
 using System.Activities.Presentation.View;
 using System.Collections.Generic;
 
-namespace RehostedWorkflowDesigner.VbExpressionEditor
+namespace OpusFluxDesigner.VbExpressionEditor
 {
     public class VbExpressionEditorService : IExpressionEditorService
     {

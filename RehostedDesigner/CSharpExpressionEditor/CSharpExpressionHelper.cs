@@ -9,7 +9,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 
-namespace RehostedWorkflowDesigner.CSharpExpressionEditor
+namespace OpusFluxDesigner.CSharpExpressionEditor
 {
     public static class CSharpExpressionHelper
     {

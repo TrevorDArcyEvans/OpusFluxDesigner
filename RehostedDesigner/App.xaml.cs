@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace RehostedWorkflowDesigner
+namespace OpusFluxDesigner
 {
     /// <summary>
     /// Interaction logic for App.xaml
