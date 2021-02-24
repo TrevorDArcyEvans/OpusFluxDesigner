@@ -19,7 +19,7 @@ The solution contains:
   * Workflow validation errors
   * selecting item in Validation Errors selects corresponding Activity
 * Workflow Management
-  * New / Open / Save / Run / Stop / Debug
+  * New / Open / Save / Run / Stop / Debug / Undo / Redo
   * toggle breakpoint on any Activity
 
 ## Custom Activities
