@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpusFluxDesigner", "RehostedDesigner\OpusFluxDesigner.csproj", "{CF40BB63-4741-41F1-9461-FA9A7319AB6C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpusFluxDesigner", "OpusFluxDesigner\OpusFluxDesigner.csproj", "{CF40BB63-4741-41F1-9461-FA9A7319AB6C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeetupActivityLibrary", "ActivityLibraries\MeetupActivityLibrary\MeetupActivityLibrary.csproj", "{9212F9E7-B12C-4FBA-AF4D-EA9B42A2AAFD}"
 EndProject

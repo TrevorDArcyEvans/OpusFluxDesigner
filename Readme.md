@@ -1,6 +1,7 @@
-# .NET Rehosted Workflow Designer
+# OpusFlux Designer
+[ formerly [.NET Rehosted Workflow Designer](https://github.com/orosandrei/Rehosted-Workflow-Designer) ]
 
-![.NET Rehosted Workflow Designer](rehosted-workflow-designer.png ".NET Rehosted Workflow Designer")
+![OpusFlux Designer](OpusFluxDesigner.png "OpusFlux Designer")
 
 The solution contains:
 
