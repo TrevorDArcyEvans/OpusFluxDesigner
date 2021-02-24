@@ -3,7 +3,7 @@
   * https://archive.codeplex.com/?p=aboutbox
 * [undo-redo](https://docs.microsoft.com/en-us/archive/blogs/kushals/undo-redo-programmatically) [done]
 * dirty tracking aka  [ModelService.ModelChanged Event](https://docs.microsoft.com/en-us/dotnet/api/system.activities.presentation.services.modelservice.modelchanged?view=netframework-4.8) [done]
-* rename
+* rename [done]
   * **OpusFluxDesigner**
   * solution/project/app
   * renamespace
