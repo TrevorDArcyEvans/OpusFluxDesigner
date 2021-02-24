@@ -116,6 +116,7 @@ The solution contains:
 <details>
 
 * [Workflow icon](https://www.visualpharm.com/free-icons/workflow-595b40b85ba036ed117dc5ff)
+* other icons from [The Noun Project](https://thenounproject.com/)
 
 
 </details>
