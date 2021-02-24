@@ -418,6 +418,16 @@ namespace RehostedWorkflowDesigner.Views
 			Application.Current.Shutdown();
 		}
 
+		private void CmdWorkflowUndo(object sender, ExecutedRoutedEventArgs e)
+		{
+			_wfDesigner.Context.Services.GetService<UndoEngine>().Undo();
+		}
+
+		private void CmdWorkflowRedo(object sender, ExecutedRoutedEventArgs e)
+		{
+			_wfDesigner.Context.Services.GetService<UndoEngine>().Redo();
+		}
+
 		private void CmdAbout(object sender, ExecutedRoutedEventArgs e)
 		{
 			var appLogo = new BitmapImage(new Uri(@"pack://application:,,,/Rehosted%20WF%20Designer;component/Resources/ApplicationLogo.bmp", UriKind.Absolute));
@@ -432,7 +442,6 @@ namespace RehostedWorkflowDesigner.Views
 			};
 
 			about.Show();
-
 		}
 
 		private void CmdWorkflowRun(object sender, ExecutedRoutedEventArgs e)

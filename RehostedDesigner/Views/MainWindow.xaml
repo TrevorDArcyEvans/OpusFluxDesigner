@@ -9,6 +9,8 @@
         <CommandBinding Command="ApplicationCommands.New" Executed="CmdWorkflowNew"/>
         <CommandBinding Command="ApplicationCommands.Open" Executed="CmdWorkflowOpen"/>
         <CommandBinding Command="ApplicationCommands.Save" Executed="CmdWorkflowSave"/>
+        <CommandBinding Command="ApplicationCommands.Undo" Executed="CmdWorkflowUndo"/>
+        <CommandBinding Command="ApplicationCommands.Redo" Executed="CmdWorkflowRedo"/>
         <CommandBinding Command="ApplicationCommands.Help" Executed="CmdAbout"/>
         <CommandBinding Command="mw:CustomCommands.CmdWfNewCSharp" Executed="CmdWorkflowNewCSharp" />
         <CommandBinding Command="mw:CustomCommands.CmdWfNewVB" Executed="CmdWorkflowNewVB" />
@@ -57,6 +59,10 @@
                     <RibbonButton Command="mw:CustomCommands.CmdWfRun" Label="Run" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/run.png" />
                     <RibbonButton Command="mw:CustomCommands.CmdWfStop" Label="Stop" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/stop.png" />
                     <RibbonButton Command="bp:BreakpointCommands.CmdToggleBreakpoint" Label="Toggle Breakpoint" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/breakpoint.png" />
+                </RibbonGroup>
+                <RibbonGroup Header="Edit">
+                    <RibbonButton Command="ApplicationCommands.Undo" Label="Undo" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/The-Noun-Project-120354-200.png" />
+                    <RibbonButton Command="ApplicationCommands.Redo" Label="Redo" LargeImageSource="/Rehosted WF Designer;component/Resources/Menu/The-Noun-Project-120350-200.png" />
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>

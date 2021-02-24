@@ -374,6 +374,10 @@
   <ItemGroup>
     <Resource Include="Resources\GitHub-Mark.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Menu\The-Noun-Project-120350-200.png" />
+    <Resource Include="Resources\Menu\The-Noun-Project-120354-200.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
