@@ -19,6 +19,7 @@ using System.Reflection;
 using System.IO;
 using System.Activities.XamlIntegration;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using Microsoft.Win32;
 using RehostedWorkflowDesigner.Helpers;
 using System.Diagnostics;
@@ -412,6 +413,11 @@ namespace RehostedWorkflowDesigner.Views
 		#endregion
 
 		#region Commands Handlers - Executed - New, Open, Save, Run
+
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			Application.Current.Shutdown();
+		}
 
 		private void CmdExit(object sender, ExecutedRoutedEventArgs e)
 		{
