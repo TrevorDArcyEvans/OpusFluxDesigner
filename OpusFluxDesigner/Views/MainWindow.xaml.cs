@@ -112,7 +112,6 @@ namespace OpusFluxDesigner.Views
 		private void WorkflowDesigner_OnModelChanged(object sender, EventArgs e)
 		{
 			IsModified = true;
-			ResetUI();
 			RegenerateSourceDebuggerMappings();
 		}
 
@@ -260,7 +259,7 @@ namespace OpusFluxDesigner.Views
 				);
 
 				var activitiesCount = _wfToolbox.Categories.Sum(toolboxCategory => toolboxCategory.Tools.Count);
-				LabelStatusBar.Content = $"Loaded Activities: {activitiesCount}";
+				StatusBar.Content = $"Loaded Activities: {activitiesCount}";
 				WfToolboxBorder.Child = _wfToolbox;
 			}
 			catch (Exception ex)
@@ -592,6 +591,8 @@ namespace OpusFluxDesigner.Views
 
 		private void CmdToggleBreakpoint(object sender, ExecutedRoutedEventArgs e)
 		{
+			StatusBar.Content = string.Empty;
+
 			var mi = _wfDesigner.Context.Items.GetValue<Selection>().PrimarySelection;
 			if (!(mi?.GetCurrentValue() is Activity activity))
 			{
@@ -600,6 +601,7 @@ namespace OpusFluxDesigner.Views
 
 			if (!_designerSourceLocationMapping.ContainsKey(activity))
 			{
+				StatusBar.Content = $"Could not set breakpoint for: {activity.Id} {activity.DisplayName}";
 				return;
 			}
 

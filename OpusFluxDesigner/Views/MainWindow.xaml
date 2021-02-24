@@ -99,7 +99,7 @@
         </TabControl>
 
         <StatusBar Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="21" Background="Gray">
-            <StatusBarItem x:Name="LabelStatusBar" Foreground="White" FontSize="12" />
+            <StatusBarItem x:Name="StatusBar" Foreground="White" FontSize="12" />
         </StatusBar>
 
         <Border Grid.Row="1" Grid.Column="0" Grid.RowSpan="3" Name="WfToolboxBorder"/>
