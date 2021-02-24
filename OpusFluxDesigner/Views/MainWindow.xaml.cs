@@ -425,12 +425,36 @@ namespace OpusFluxDesigner.Views
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
+			if (IsModified)
+			{
+				var dlgResult = MessageBox.Show(
+					"You have unsaved changes.  Do you want to save them?",
+					"Save Workflow",
+					MessageBoxButton.YesNoCancel,
+					MessageBoxImage.Warning,
+					MessageBoxResult.Yes);
+				if (dlgResult == MessageBoxResult.Cancel)
+				{
+					e.Cancel = true;
+					return;
+				}
+				if (dlgResult == MessageBoxResult.Yes)
+				{
+					CmdWorkflowSave(this, null);
+				}
+			}
+
+			// If we get to here, user has already been given chance to save.
+			// This is also called from CmdExit, so clear dirty flag or
+			// user will be asked to save again.
+			IsModified = false;
+
 			Application.Current.Shutdown();
 		}
 
 		private void CmdExit(object sender, ExecutedRoutedEventArgs e)
 		{
-			Application.Current.Shutdown();
+			OnClosing(new CancelEventArgs());
 		}
 
 		private void CmdWorkflowUndo(object sender, ExecutedRoutedEventArgs e)
