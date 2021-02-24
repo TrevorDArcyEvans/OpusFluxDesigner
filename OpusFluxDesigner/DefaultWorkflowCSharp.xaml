@@ -1,4 +1,7 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="OpusFluxDesigner.Workflow" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#"
+﻿<Activity 
+ x:Class="OpusFluxDesigner.Workflow"
+ sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#"
+ mc:Ignorable="sap sap2010 sads"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
