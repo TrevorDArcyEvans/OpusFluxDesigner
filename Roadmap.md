@@ -8,7 +8,7 @@
   * solution/project/app
   * renamespace
   * repo
-* release on GitHub
+* release on GitHub [done]
 * [AvalonDock](https://github.com/Dirkster99/AvalonDock)
   * [TestApp](https://github.com/Dirkster99/AvalonDock/tree/master/source/TestApp)
   * [CodeProject sample project](https://www.codeproject.com/Articles/239342/AvalonDock-and-MVVM)
