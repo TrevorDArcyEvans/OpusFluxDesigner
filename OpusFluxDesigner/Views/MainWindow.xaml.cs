@@ -453,7 +453,7 @@ namespace OpusFluxDesigner.Views
 				IsSemanticVersioning = true,
 				ApplicationLogo = appLogo,
 				PublisherLogo = pubLogo,
-				HyperlinkText = "https://github.com/TrevorDArcyEvans/Rehosted-Workflow-Designer",
+				HyperlinkText = "https://github.com/TrevorDArcyEvans/OpusFluxDesigner",
 				AdditionalNotes = string.Empty
 			};
 
