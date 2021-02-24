@@ -23,15 +23,17 @@ using System.ComponentModel;
 using Microsoft.Win32;
 using RehostedWorkflowDesigner.Helpers;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Gat.Controls;
 using Newtonsoft.Json.Linq;
+using RehostedWorkflowDesigner.Annotations;
 
 namespace RehostedWorkflowDesigner.Views
 {
-	public sealed partial class MainWindow
+	public sealed partial class MainWindow : INotifyPropertyChanged
 	{
 		private const string All = "*";
 
@@ -100,8 +102,16 @@ namespace RehostedWorkflowDesigner.Views
 
 		public ObservableCollection<TrackingRecordInfo> TrackingRecordInfos { get; set; } = new ObservableCollection<TrackingRecordInfo>();
 
+		private bool _isModified;
+		public bool IsModified
+		{
+			get => _isModified;
+			set => SetProperty(ref _isModified, value);
+		}
+
 		private void WorkflowDesigner_OnModelChanged(object sender, EventArgs e)
 		{
+			IsModified = true;
 			ResetUI();
 			RegenerateSourceDebuggerMappings();
 		}
@@ -513,12 +523,19 @@ namespace RehostedWorkflowDesigner.Views
 				{
 					_wfDesigner.Save(dialogSave.FileName);
 					_currentWorkflowFile = dialogSave.FileName;
+					IsModified = false;
 				}
 			}
 			else
 			{
 				_wfDesigner.Save(_currentWorkflowFile);
+				IsModified = false;
 			}
+		}
+
+		private void CmdWorkflowSave_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = IsModified;
 		}
 
 		private void CmdWorkflowNew(object sender, ExecutedRoutedEventArgs e)
@@ -568,6 +585,7 @@ namespace RehostedWorkflowDesigner.Views
 			var validationErrorService = new ValidationErrorService(WorkflowErrors.Items);
 			_wfDesigner.Context.Services.Publish<IValidationErrorService>(validationErrorService);
 
+			IsModified = false;
 			ResetUI();
 			RegenerateSourceDebuggerMappings();
 		}
@@ -596,6 +614,31 @@ namespace RehostedWorkflowDesigner.Views
 				_wfDesigner.Context.Services.GetService<IDesignerDebugView>().UpdateBreakpoint(srcLoc, BreakpointTypes.None);
 				_breakpointList.Remove(srcLoc);
 			}
+		}
+
+		#endregion
+
+		#region INotifyPropertyChanged
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		[NotifyPropertyChangedInvocator]
+		private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		private bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+		{
+			if (EqualityComparer<T>.Default.Equals(storage, value))
+			{
+				return false;
+			}
+
+			storage = value;
+			OnPropertyChanged(propertyName);
+
+			return true;
 		}
 
 		#endregion

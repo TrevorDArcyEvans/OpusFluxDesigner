@@ -8,7 +8,7 @@
         <CommandBinding Command="ApplicationCommands.Close" Executed="CmdExit"/>
         <CommandBinding Command="ApplicationCommands.New" Executed="CmdWorkflowNew"/>
         <CommandBinding Command="ApplicationCommands.Open" Executed="CmdWorkflowOpen"/>
-        <CommandBinding Command="ApplicationCommands.Save" Executed="CmdWorkflowSave"/>
+        <CommandBinding Command="ApplicationCommands.Save" Executed="CmdWorkflowSave" CanExecute="CmdWorkflowSave_CanExecute"/>
         <CommandBinding Command="ApplicationCommands.Undo" Executed="CmdWorkflowUndo"/>
         <CommandBinding Command="ApplicationCommands.Redo" Executed="CmdWorkflowRedo"/>
         <CommandBinding Command="ApplicationCommands.Help" Executed="CmdAbout"/>
