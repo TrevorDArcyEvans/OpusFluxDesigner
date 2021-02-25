@@ -5,13 +5,13 @@
         xmlns:bp="clr-namespace:OpusFluxDesigner.Helpers"
         Title="OpusFlux Designer">
     <Window.CommandBindings>
-        <CommandBinding Command="ApplicationCommands.Close" Executed="CmdExit"/>
-        <CommandBinding Command="ApplicationCommands.New" Executed="CmdWorkflowNew"/>
-        <CommandBinding Command="ApplicationCommands.Open" Executed="CmdWorkflowOpen"/>
-        <CommandBinding Command="ApplicationCommands.Save" Executed="CmdWorkflowSave" CanExecute="CmdWorkflowSave_CanExecute"/>
-        <CommandBinding Command="ApplicationCommands.Undo" Executed="CmdWorkflowUndo"/>
-        <CommandBinding Command="ApplicationCommands.Redo" Executed="CmdWorkflowRedo"/>
-        <CommandBinding Command="ApplicationCommands.Help" Executed="CmdAbout"/>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="CmdExit" />
+        <CommandBinding Command="ApplicationCommands.New" Executed="CmdWorkflowNew" />
+        <CommandBinding Command="ApplicationCommands.Open" Executed="CmdWorkflowOpen" />
+        <CommandBinding Command="ApplicationCommands.Save" Executed="CmdWorkflowSave" CanExecute="CmdWorkflowSave_CanExecute" />
+        <CommandBinding Command="ApplicationCommands.Undo" Executed="CmdWorkflowUndo" />
+        <CommandBinding Command="ApplicationCommands.Redo" Executed="CmdWorkflowRedo" />
+        <CommandBinding Command="ApplicationCommands.Help" Executed="CmdAbout" />
         <CommandBinding Command="mw:CustomCommands.CmdWfNewCSharp" Executed="CmdWorkflowNewCSharp" />
         <CommandBinding Command="mw:CustomCommands.CmdWfNewVB" Executed="CmdWorkflowNewVB" />
         <CommandBinding Command="mw:CustomCommands.CmdWfRun" Executed="CmdWorkflowRun" />
@@ -20,8 +20,8 @@
     </Window.CommandBindings>
 
     <Window.InputBindings>
-        <KeyBinding Command="mw:CustomCommands.CmdWfRun" Key="F5"/>
-        <KeyBinding Command="bp:BreakpointCommands.CmdToggleBreakpoint" Key="F9"/>
+        <KeyBinding Command="mw:CustomCommands.CmdWfRun" Key="F5" />
+        <KeyBinding Command="bp:BreakpointCommands.CmdToggleBreakpoint" Key="F9" />
     </Window.InputBindings>
 
     <Grid>
@@ -72,7 +72,7 @@
         <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="4*" />
-                <RowDefinition Height="3"/>
+                <RowDefinition Height="3" />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Grid.Column="0" Name="WfDesignerBorder" Padding="3" />
