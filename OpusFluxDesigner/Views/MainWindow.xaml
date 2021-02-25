@@ -79,7 +79,7 @@
 
             <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" ResizeDirection="Rows" Background="Gray" Height="3" />
 
-            <TabControl Grid.Row="2">
+            <TabControl Grid.Row="2" Margin="3">
                 <TabItem Header="Execution Log">
                     <ListView 
                     x:Name="ConsoleExecutionLog" 
