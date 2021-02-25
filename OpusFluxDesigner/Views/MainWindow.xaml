@@ -34,7 +34,7 @@
             <RowDefinition Height="133" />
             <RowDefinition Height="4*" />
             <RowDefinition />
-            <RowDefinition Height="21"/>
+            <RowDefinition Height="21" />
         </Grid.RowDefinitions>
 
         <Ribbon Grid.Row="0" Grid.ColumnSpan="3">
@@ -66,43 +66,53 @@
             </RibbonTab>
         </Ribbon>
 
-        <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeDirection="Columns" Margin="0" Padding="0" Background = "Gray" Width = "2" />
-        <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeDirection="Columns" Margin="0" Padding="0" Background = "Gray" Width = "2" />
+        <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeDirection="Columns" Margin="0" Padding="0" Background= "Gray" Width="3" />
+        <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeDirection="Columns" Margin="0" Padding="0" Background= "Gray" Width="3" />
 
-        <TabControl Grid.Row="2" Grid.Column="1" Grid.RowSpan="2">
-            <TabItem Header="Execution Log">
-                <ListView 
+        <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="4*" />
+                <RowDefinition Height="3"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Grid.Column="0" Name="WfDesignerBorder" Padding="3" />
+
+            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" ResizeDirection="Rows" Background="Gray" Height="3" />
+
+            <TabControl Grid.Row="2">
+                <TabItem Header="Execution Log">
+                    <ListView 
                     x:Name="ConsoleExecutionLog" 
                     ScrollViewer.VerticalScrollBarVisibility="Auto" 
                     FontFamily="Consolas"
                     ItemsSource="{Binding TrackingRecordInfos}"
                     SelectionChanged="ConsoleExecutionLog_SelectionChanged" />
-            </TabItem>
+                </TabItem>
 
-            <TabItem Header="Output">
-                <TextBox 
+                <TabItem Header="Output">
+                    <TextBox 
                     x:Name="ConsoleOutput" 
                     ScrollViewer.VerticalScrollBarVisibility="Auto" 
                     FontFamily="Consolas"
                     IsReadOnly="True" />
-            </TabItem>
+                </TabItem>
 
-            <TabItem Header="Validation Errors">
-                <ListView 
+                <TabItem Header="Validation Errors">
+                    <ListView 
                     x:Name="WorkflowErrors" 
                     ScrollViewer.VerticalScrollBarVisibility="Auto" 
                     FontFamily="Consolas"
                     DisplayMemberPath="Message"
                     SelectionChanged="WorkflowErrors_SelectionChanged" />
-            </TabItem>
-        </TabControl>
+                </TabItem>
+            </TabControl>
+        </Grid>
 
         <StatusBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="21" Background="Gray">
             <StatusBarItem x:Name="StatusBar" Foreground="White" FontSize="12" />
         </StatusBar>
 
-        <Border Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Name="WfToolboxBorder"/>
-        <Border Grid.Row="1" Grid.Column="1" Name="WfDesignerBorder" Padding="3"/>
-        <Border Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Name="WfPropertyBorder"/>
+        <Border Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Name="WfToolboxBorder" />
+        <Border Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Name="WfPropertyBorder" />
     </Grid>
 </Window>
