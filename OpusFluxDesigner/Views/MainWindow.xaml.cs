@@ -232,6 +232,7 @@ namespace OpusFluxDesigner.Views
 										 && !activityType.IsNested
 										 && !activityType.IsAbstract
 										 && activityType.GetConstructor(Type.EmptyTypes) != null
+										 && !activityType.Name.Contains('`') //optional, for extra cleanup
 									 orderby
 										 activityType.Name
 									 select
