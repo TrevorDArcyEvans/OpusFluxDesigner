@@ -41,8 +41,8 @@
         <Ribbon Grid.Row="0" Grid.ColumnSpan="3">
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu>
-                    <RibbonApplicationMenuItem Header="Exit" ImageSource="/OpusFluxDesigner;component/Resources/Menu/exit.png" Command="ApplicationCommands.Close" />
                     <RibbonApplicationMenuItem Header="About" ImageSource="/OpusFluxDesigner;component/Resources/Menu/The-Noun-Project-1876966-200.png" Command="ApplicationCommands.Help" />
+                    <RibbonApplicationMenuItem Header="Exit" ImageSource="/OpusFluxDesigner;component/Resources/Menu/exit.png" Command="ApplicationCommands.Close" />
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>
             <RibbonTab Header="Workflow">
