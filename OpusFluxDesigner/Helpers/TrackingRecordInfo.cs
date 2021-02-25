@@ -2,6 +2,7 @@
 using System.Activities;
 using System.Activities.Debugger;
 using System.Activities.Tracking;
+using System.Linq;
 
 namespace OpusFluxDesigner.Helpers
 {
@@ -27,7 +28,15 @@ namespace OpusFluxDesigner.Helpers
 
 		public override string ToString()
 		{
-			return $"[{ReceivedUtc:s}] [{Activity.DisplayName}] [{((ActivityStateRecord)Record).State}]";
+			var msg = $"[{ReceivedUtc:s}] [{Activity.DisplayName}] [{((ActivityStateRecord)Record).State}]";
+			if (Record is ActivityStateRecord actRec &&
+				actRec.Variables.Count > 0)
+			{
+				var variables = actRec.Variables.Select(v => $"  {v.Key} : {v.Value}");
+				var varMsg = string.Join(Environment.NewLine, variables);
+				msg += Environment.NewLine + varMsg;
+			}
+			return msg;
 		}
 	}
 }
