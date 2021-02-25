@@ -22,6 +22,7 @@ The solution contains:
 * Workflow Management
   * New / Open / Save / Run / Stop / Debug / Undo / Redo
   * toggle breakpoint on any Activity
+  * show value of variables during execution
 
 ## Custom Activities
 
